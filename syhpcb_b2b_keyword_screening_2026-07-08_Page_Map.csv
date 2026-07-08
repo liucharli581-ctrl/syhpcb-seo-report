@@ -1,0 +1,16 @@
+﻿Page / Content Asset,Primary Keywords,Secondary Keywords,Page Intent,Priority,Status / Notes,Source URL
+Homepage / Custom PCB Manufacturer,custom pcb manufacturer; pcb manufacturer; custom pcb,custom printed circuit board; printed circuit board manufacturer,制造商信任+询盘入口,A,首页标题与首屏可强化 Trusted Custom PCB Manufacturer + Get a Quote,https://syhpcb.com/
+PCB Manufacturing / Fabrication,pcb manufacturing; pcb fabrication; pcb fabrication service,circuit board manufacturing; pcb board fabrication; printed circuit board fabrication,承接制造/制板询盘,A,现有 fabrication 页面可继续拓展 manufacturer/quote/capabilities 模块,https://syhpcb.com/pcb-services/pcb-fabrication/
+PCB Assembly / PCBA,pcb assembly; pcb assembly services; printed circuit board assembly,pcba manufacturing; turnkey pcb assembly; smt pcb assembly,承接PCBA/装配询盘,A,现有服务页已有 Assembly，可单独加强工艺、BOM、SMT/THT、检测、报价,https://syhpcb.com/pcb-services/
+PCB Prototype / Quick-turn,pcb prototype; pcb prototype service; rapid pcb prototyping,quick turn pcb fabrication; prototype pcb assembly,承接打样/小批量试产,A,现有 prototype 页面可强化 quick-turn/low MOQ/lead time,https://syhpcb.com/pcb-services/pcb-prototype/
+China PCB Manufacturer / Supplier,china pcb manufacturer; pcb manufacturer china,china pcb supplier; pcb fabrication china,海外客户找中国/深圳工厂,A,建议新增落地页，强化 Shenzhen factory、出口、质量、交期、保密,https://syhpcb.com/about/
+Flexible / Flex PCB,flexible pcb; flex pcb; flexible pcb manufacturer,flex pcb fabrication; flexible pcb supplier; flex pcb assembly,柔性板品类询盘,A,现有 Custom PCB 下有 Flex PCB 菜单，建议单独丰富,https://syhpcb.com/custom-pcb/
+Rigid-Flex PCB,rigid flex pcb; rigid-flex pcb; rigid flex pcb manufacturer,rigid flex pcb fabrication; custom rigid flex pcb,高价值复杂板询盘,A,建议新增页，当前导航没有明确 Rigid-Flex，容易形成增量机会,https://syhpcb.com/custom-pcb/
+HDI PCB,hdi pcb; hdi pcb manufacturer; hdi pcb fabrication,hdi pcb supplier; hdi pcb manufacturing,高密度互连板询盘,A,建议新增页，KD较低，B2B意图明确,https://syhpcb.com/custom-pcb/
+Aluminum / Metal Core / MCPCB,aluminum pcb; metal core pcb; mcpcb,aluminum pcb manufacturer; metal core pcb manufacturer; led mcpcb manufacturer,散热/LED/电源应用询盘,A,现有 Aluminum PCB，可合并覆盖 Metal Core/MCPCB 语义,https://syhpcb.com/custom-pcb/
+FR4 PCB,fr4 pcb; fr4 pcb board,fr4 pcb manufacturer; high tg fr4 pcb manufacturer,常规材料品类询盘,B,现有 FR4 PCB，可增加材料、厚度、TG、层数规格,https://syhpcb.com/custom-pcb/
+Copper / Heavy Copper PCB,heavy copper pcb; heavy copper pcb manufacturer,copper pcb; thick copper pcb; 2oz copper pcb,大电流/散热应用询盘,B,现有 Copper PCB，可补 Heavy Copper 模块,https://syhpcb.com/custom-pcb/
+Multilayer PCB,multilayer pcb; multilayer pcb manufacturing,multilayer pcb fabrication; multilayer pcb supplier,多层板询盘,A,现有 Multilayer PCB，可加强层数、阻抗、材料、检测,https://syhpcb.com/custom-pcb/
+RF / High Frequency / Rogers / Ceramic PCB,high frequency pcb manufacturer; rf pcb manufacturer,rogers pcb; ceramic pcb; microwave pcb fabrication,特种材料/高频应用询盘,B,建议先用专题页/栏目测试，确认产能再单独扩展,https://syhpcb.com/custom-pcb/
+Industry Pages,automotive pcb; medical pcb; industrial pcb manufacturing,led pcb manufacturer; aerospace pcb manufacturer,行业应用背书,B/C,汽车/医疗/工业/LED可做；aerospace需确认认证再做,https://syhpcb.com/
+Cost & Quote FAQ,pcb assembly cost; pcb manufacturing cost; flexible pcb price,hdi pcb price; pcb fabrication quote; pcb assembly quote,FAQ拦截询盘前疑虑,C,不要单独堆薄文，嵌入服务页FAQ+报价CTA,https://syhpcb.com/contact/

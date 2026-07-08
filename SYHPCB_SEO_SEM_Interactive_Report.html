@@ -1,0 +1,1377 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYHPCB — Search Growth Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ============================================================
+   DESIGN SYSTEM — guizang-ppt-skill · 赤瓷
+   ============================================================ */
+:root{
+  /* 🔴 赤瓷 theme · SYHPCB brand */
+  --ink:#1c0808;
+  --ink-rgb:28,8,8;
+  --paper:#f5efec;
+  --paper-rgb:245,239,236;
+  --paper-tint:#e8e0dc;
+  --ink-tint:#2a1010;
+  --brand:#c62c33;
+  --brand-rgb:198,44,51;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+  font-family:'Noto Sans SC','Inter',sans-serif;
+  background:var(--ink);
+  overflow:hidden;
+  width:100vw;height:100vh;
+  user-select:none;
+}
+
+/* ── Presentation Frame ── */
+#p{
+  width:100vw;height:100vh;
+  position:relative;overflow:hidden;
+  background:var(--paper);
+}
+
+/* ── WebGL Canvas ── */
+#webgl{
+  position:absolute;inset:0;z-index:0;
+  display:block;width:100%;height:100%;
+  pointer-events:none;opacity:.75;
+}
+.slide.dark #webgl{opacity:.85}
+.slide.hero #webgl{opacity:1}
+
+/* ── Slide base ── */
+.slide{
+  position:absolute;inset:0;z-index:1;
+  padding:4vh 4.8vw 6vh;
+  display:flex;flex-direction:column;
+  opacity:0;visibility:hidden;
+  transition:opacity .5s ease,visibility .5s ease;
+  overflow:hidden;
+  background:transparent;
+}
+.slide.active{opacity:1;visibility:visible;z-index:2}
+
+/* ── Light / Dark overlay ── */
+.slide::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  pointer-events:none;
+}
+.slide.light::before{
+  background:rgba(var(--paper-rgb),.92);
+}
+.slide.dark::before{
+  background:rgba(var(--ink-rgb),.88);
+}
+.slide.hero.light::before{background:rgba(var(--paper-rgb),.72)}
+.slide.hero.dark::before{background:rgba(var(--ink-rgb),.72)}
+.slide>*{position:relative;z-index:1}
+
+/* ── Font classes ── */
+.display{font-family:'Playfair Display',serif;font-weight:700;font-size:14vw;line-height:1}
+.display-zh{font-family:'Noto Serif SC',serif;font-weight:700;font-size:10.5vw;line-height:1.15}
+.h1-zh{font-family:'Noto Serif SC',serif;font-weight:700;font-size:clamp(40px,7vw,96px);line-height:1.2}
+.h2-zh{font-family:'Noto Serif SC',serif;font-weight:600;font-size:clamp(32px,5.2vw,72px);line-height:1.25}
+.h3-zh{font-family:'Noto Serif SC',serif;font-weight:500;font-size:clamp(24px,3.6vw,50px);line-height:1.3}
+.lead{font-family:'Noto Serif SC',serif;font-weight:400;font-size:clamp(24px,3.4vw,46px);line-height:1.6}
+.body-zh{font-family:'Noto Sans SC',sans-serif;font-weight:400;font-size:clamp(17px,2.2vw,30px);line-height:1.7}
+.body-serif{font-family:'Noto Serif SC',serif;font-weight:400;font-size:clamp(18px,2.3vw,32px);line-height:1.6}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.1vw,18px);text-transform:uppercase;letter-spacing:.12em;opacity:.55}
+.light .kicker{color:rgba(var(--brand-rgb),.7);opacity:1}
+.dark .kicker{opacity:.55}
+.meta{font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.2vw,20px);text-transform:uppercase;letter-spacing:.06em}
+.big-num{font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(70px,14vw,200px);line-height:1}
+.mid-num{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(48px,8.5vw,120px);line-height:1}
+.en{font-family:'Playfair Display',serif;font-style:italic}
+
+/* ── Colors per theme ── */
+.light{color:var(--ink)}
+.light .hi{background:linear-gradient(180deg,transparent 55%,rgba(var(--brand-rgb),.15)0)}
+.dark{color:var(--paper)}
+.dark .hi{background:linear-gradient(180deg,transparent 55%,rgba(var(--paper-rgb),.12)0)}
+
+/* ── Chrome & Foot ── */
+.chrome{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(12px,.9vw,17px);
+  text-transform:uppercase;letter-spacing:.08em;
+  padding-bottom:1.2vh;margin-bottom:2vh;
+  border-bottom:1px solid currentColor;
+  opacity:.35;flex-shrink:0;
+}
+.chrome .left{display:flex;align-items:center;gap:1.2vw}
+.chrome .left::before{content:'';width:3px;height:1.2em;background:rgba(var(--brand-rgb),.6);border-radius:2px;flex-shrink:0}
+.chrome .sep{width:1px;height:1em;background:currentColor;opacity:.35}
+.chrome .right{text-align:right}
+.foot{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(12px,.9vw,17px);
+  text-transform:uppercase;letter-spacing:.06em;
+  padding-top:1.2vh;margin-top:auto;
+  border-top:1px solid currentColor;
+  opacity:.28;flex-shrink:0;
+}
+
+/* ── Callout ── */
+.callout{
+  max-width:80vw;margin:2vh 0;
+}
+.callout .q-big{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(26px,4vw,60px);
+  font-weight:600;line-height:1.4;
+}
+.callout .cite{
+  display:block;margin-top:1vh;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(13px,1vw,18px);
+  opacity:.5;
+}
+
+/* ── Stat ── */
+.grid-6{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2vh 1.6vw}
+.grid-4{display:grid;grid-template-columns:1fr 1fr;gap:1.2vh 1.6vw}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2vh 1.6vw}
+.stat{padding:1.6vh 1.2vw}
+.stat .m{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,.85vw,16px);text-transform:uppercase;letter-spacing:.1em;opacity:.45;display:block}
+.stat .n{font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(48px,7vw,100px);line-height:1.1;display:block;margin-top:.2vh}
+.stat .l{font-family:'Noto Sans SC',sans-serif;font-size:clamp(14px,1.1vw,20px);opacity:.55;display:block;margin-top:.2vh}
+
+/* ── Platform ── */
+.plat{padding:1.6vh 1.2vw;border-top:1px solid currentColor;border-color:rgba(var(--ink-rgb),.12)}
+.plat .sub{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,.85vw,16px);text-transform:uppercase;letter-spacing:.1em;opacity:.45}
+.plat .name{font-family:'Noto Serif SC',serif;font-size:clamp(20px,2.2vw,34px);font-weight:600;margin-top:.3vh}
+.plat .nb{font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(28px,3.6vw,54px);margin-top:.2vh}
+
+/* ── Rowline ── */
+.rowline{
+  display:grid;grid-template-columns:1.2fr 3fr 1fr;
+  gap:.8vw;align-items:center;
+  padding:1.2vh .8vw;
+  border-bottom:1px solid currentColor;
+  border-color:rgba(var(--ink-rgb),.08);
+}
+.rowline:first-child{border-top:1px solid currentColor;border-color:rgba(var(--ink-rgb),.12)}
+.rowline:last-child{border-bottom-color:rgba(var(--ink-rgb),.12)}
+.rowline .k{font-family:'Noto Serif SC',serif;font-weight:600;font-size:clamp(16px,1.4vw,24px)}
+.rowline .v{font-family:'Noto Sans SC',sans-serif;font-size:clamp(14px,1.2vw,20px);opacity:.7}
+.rowline .m{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,.9vw,17px);text-transform:uppercase;text-align:right;opacity:.45}
+.rowline-2{grid-template-columns:1fr 2fr}
+
+/* ── Pillar ── */
+.pillar{padding:2.4vh 1.6vw}
+.pillar .ic{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(28px,3vw,48px);opacity:.4;margin-bottom:.8vh}
+.pillar .t{font-family:'Noto Serif SC',serif;font-weight:600;font-size:clamp(18px,2vw,32px);line-height:1.3;margin-bottom:.6vh}
+.pillar .d{font-family:'Noto Sans SC',sans-serif;font-size:clamp(14px,1.2vw,20px);line-height:1.7;opacity:.6}
+
+/* ── Tag ── */
+.tag{
+  display:inline-block;
+  padding:.4vh .8vw;
+  border:1px solid currentColor;
+  border-color:rgba(var(--ink-rgb),.2);
+  border-radius:100px;
+  font-family:'Noto Sans SC',sans-serif;
+  font-size:clamp(12px,.9vw,17px);
+  opacity:.7;
+}
+
+/* ── Ghost ── */
+.ghost{
+  position:absolute;z-index:0;
+  font-family:'Playfair Display',serif;
+  font-size:34vw;font-weight:700;
+  opacity:.06;pointer-events:none;
+  line-height:1;
+}
+
+/* ── Pipeline ── */
+.pipeline{
+  display:grid;gap:1.6vw;margin-top:2vh;
+  flex:1;align-content:center;
+}
+.pipeline[data-cols="3"]{grid-template-columns:1fr 1fr 1fr}
+.pipeline[data-cols="4"]{grid-template-columns:1fr 1fr 1fr 1fr}
+.pipeline[data-cols="5"]{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
+.step{
+  padding:2.4vh 1.6vw;
+  border:1px solid currentColor;
+  border-color:rgba(var(--ink-rgb),.15);
+  border-radius:4px;
+  opacity:1;
+  transition:opacity .4s ease;
+}
+.step .step-num{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(24px,2.4vw,40px);opacity:.35;margin-bottom:.6vh;display:block}
+.step .step-title{font-family:'Noto Serif SC',serif;font-weight:600;font-size:clamp(18px,2vw,32px);margin-bottom:.4vh}
+.step .step-desc{font-family:'Noto Sans SC',sans-serif;font-size:clamp(14px,1.2vw,20px);opacity:.55;line-height:1.6}
+
+/* ── Figure ── */
+figure.tile{margin:0}
+.frame-img{overflow:hidden;border-radius:3px;background:rgba(var(--ink-rgb),.04)}
+.frame-img img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.frame-cap{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.6vh 0;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(11px,.85vw,16px);
+  text-transform:uppercase;letter-spacing:.06em;
+  opacity:.5;
+}
+
+/* ── Navigation ── */
+#nav{
+  position:fixed;bottom:2.4vh;left:50%;transform:translateX(-50%);
+  z-index:100;
+  display:flex;align-items:center;gap:1.2vw;
+  padding:.8vh 1.6vw;
+  border-radius:100px;
+  background:rgba(var(--ink-rgb),.06);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+#nav button{
+  background:none;border:none;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(13px,1.1vw,19px);
+  color:inherit;opacity:.5;
+  transition:opacity .2s;
+  padding:.2vh .4vw;
+}
+#nav button:hover,#nav button.active{opacity:1}
+#nav .dots{display:flex;gap:.4vw}
+#nav .dot{
+  width:clamp(4px,.4vw,7px);height:clamp(4px,.4vw,7px);
+  border-radius:50%;border:none;
+  background:currentColor;opacity:.2;
+  cursor:pointer;transition:all .3s;padding:0;
+}
+#nav .dot.active{opacity:.7;width:clamp(12px,1.2vw,20px);border-radius:4px;background:rgba(var(--brand-rgb),.7)}
+#nav .dot:hover{opacity:.5}
+
+/* ── Index overlay ── */
+#index{
+  position:fixed;inset:0;z-index:200;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:rgba(var(--ink-rgb),.95);
+  color:var(--paper);
+  opacity:0;visibility:hidden;
+  transition:all .35s ease;
+}
+#index.show{opacity:1;visibility:visible}
+#index .grid{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:1.6vw;max-width:70vw;
+}
+#index .item{
+  text-align:center;padding:1.6vh;
+  cursor:pointer;border-radius:4px;
+  transition:background .2s;
+  font-family:'Noto Sans SC',sans-serif;
+}
+#index .item:hover{background:rgba(var(--paper-rgb),.08)}
+#index .item .num{font-family:'Playfair Display',serif;font-size:clamp(22px,2.2vw,40px);font-weight:700;opacity:.35}
+#index .item .label{font-size:clamp(13px,1.1vw,20px);margin-top:.4vh}
+#index-close{
+  position:absolute;top:4vh;right:4vw;
+  background:none;border:none;color:var(--paper);
+  font-size:clamp(24px,2.8vw,44px);cursor:pointer;
+  opacity:.5;transition:opacity .2s;
+}
+#index-close:hover{opacity:1}
+
+/* ── Screenshot Viewer ── */
+#shotView{
+  position:fixed;inset:0;z-index:300;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:rgba(0,0,0,.92);
+  opacity:0;visibility:hidden;
+  transition:all .35s ease;
+  padding:4vh 4vw;
+}
+#shotView.show{opacity:1;visibility:visible}
+#shotView .viewer-img{
+  max-width:min(90vw,1400px);
+  max-height:80vh;
+  object-fit:contain;
+  border-radius:4px;
+  box-shadow:0 4px 40px rgba(0,0,0,.5);
+}
+#shotView .viewer-label{
+  margin-top:1.2vh;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(13px,1.1vw,20px);
+  color:rgba(255,255,255,.45);
+  letter-spacing:.06em;
+}
+#shotView .viewer-nav{
+  display:flex;gap:1.2vw;margin-top:1.6vh;
+  align-items:center;
+}
+#shotView .viewer-nav button{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  color:#fff;cursor:pointer;
+  padding:.6vh 1.2vw;
+  border-radius:4px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(13px,1vw,18px);
+  transition:background .2s;
+}
+#shotView .viewer-nav button:hover{background:rgba(255,255,255,.15)}
+#shotView .viewer-nav .counter{
+  color:rgba(255,255,255,.3);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(13px,1vw,18px);
+  min-width:6ch;text-align:center;
+}
+#shotView .viewer-close{
+  position:absolute;top:2vh;right:2vw;
+  background:none;border:none;color:#fff;
+  font-size:clamp(24px,2.8vw,44px);cursor:pointer;
+  opacity:.4;transition:opacity .2s;
+}
+#shotView .viewer-close:hover{opacity:1}
+.competitor-row{
+  transition:background .2s !important;
+  border-radius:2px;
+}
+.competitor-row .shot-hint{opacity:.35;font-size:.7em;transition:all .2s;display:inline-block}
+.competitor-row:hover .shot-hint{opacity:1;transform:scale(1.15)}
+.competitor-row::after{
+  content:'点击查看截图 ›';
+  position:absolute;right:.6vw;top:50%;transform:translateY(-50%);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(8px,.55vw,11px);
+  opacity:0;transition:opacity .2s;
+  background:rgba(var(--paper-rgb),.08);
+  padding:.15vh .5vw;border-radius:3px;
+  color:rgba(var(--paper-rgb),.5);
+  pointer-events:none;
+}
+.competitor-row:hover::after{opacity:1}
+.competitor-row{position:relative}
+
+/* ═══ Shot trigger buttons on data slides ═══ */
+.shot-trigger{
+  display:inline-flex;align-items:center;gap:.4vw;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(10px,.75vw,14px);
+  padding:.4vh .8vw;
+  border-radius:4px;
+  border:1px solid rgba(var(--ink-rgb),.15);
+  background:rgba(var(--ink-rgb),.04);
+  color:rgba(var(--ink-rgb),.55);
+  cursor:pointer;
+  transition:all .25s;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.shot-trigger:hover{
+  background:rgba(var(--brand-rgb),.08);
+  color:rgba(var(--brand-rgb),.8);
+  border-color:rgba(var(--brand-rgb),.3);
+}
+.shot-trigger.dark{
+  border-color:rgba(var(--paper-rgb),.15);
+  background:rgba(var(--paper-rgb),.04);
+  color:rgba(var(--paper-rgb),.5);
+}
+.shot-trigger.dark:hover{
+  background:rgba(var(--brand-rgb),.15);
+  color:rgba(var(--paper-rgb),.9);
+  border-color:rgba(var(--brand-rgb),.5);
+}
+
+/* ═══ Data annotation badges ═══ */
+.data-anno{
+  display:inline-block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(8px,.55vw,11px);
+  padding:.15vh .5vw .15vh .4vw;
+  border-radius:3px;
+  letter-spacing:.02em;
+  line-height:1.6;
+  white-space:nowrap;
+}
+.data-anno.light{
+  background:rgba(var(--brand-rgb),.08);
+  color:rgba(var(--brand-rgb),.6);
+  border-left:2px solid rgba(var(--brand-rgb),.35);
+}
+.data-anno.dark{
+  background:rgba(var(--paper-rgb),.06);
+  color:rgba(var(--paper-rgb),.4);
+  border-left:2px solid rgba(var(--paper-rgb),.2);
+}
+.data-anno .anno-dot{
+  display:inline-block;
+  width:5px;height:5px;
+  border-radius:50%;
+  margin-right:.3vw;
+}
+.data-anno .anno-dot.g{background:rgba(var(--brand-rgb),.7)}
+.data-anno .anno-dot.b{background:rgba(var(--brand-rgb),.5)}
+.data-anno .anno-dot.o{background:rgba(var(--brand-rgb),.85)}
+.data-anno .anno-dot.p{background:rgba(var(--brand-rgb),.6)}
+.competitor-row:hover{
+  background:rgba(var(--paper-rgb),.04) !important;
+}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .slide{padding:3vh 3.2vw 8vh}
+  .grid-6,.grid-3,.pipeline[data-cols="3"],
+  .pipeline[data-cols="4"],.pipeline[data-cols="5"]{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:1fr}
+  .rowline{grid-template-columns:1fr;gap:.4vh}
+  .rowline .m{text-align:left}
+  #nav{gap:2vw;padding:1vh 3vw}
+  #nav .dots{display:none}
+  #index .grid{grid-template-columns:repeat(3,1fr);gap:2vw;max-width:90vw}
+  .chrome .right span{font-size:clamp(11px,.85vw,16px)}
+}
+</style>
+</head>
+<body>
+<div id="p">
+
+<!-- ═══ WebGL Canvas ═══ -->
+<canvas id="webgl"></canvas>
+
+<!-- ════════════════ SLIDE 01 — COVER (hero dark) ════════════════ -->
+<section class="slide dark hero active" data-theme="dark" data-index="0">
+  <div class="ghost" style="right:-4vw;top:-10vh;color:rgba(var(--brand-rgb),.12)">BLUEPRINT</div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;z-index:2">
+    <div class="kicker" data-anim style="margin-bottom:1.5vh">SYHPCB · 2026</div>
+    <div class="display-zh" data-anim style="font-size:clamp(42px,7.5vw,110px);margin-bottom:1.5vh">Search Growth<br><span style="color:rgba(var(--brand-rgb),.75)">Blueprint</span></div>
+    <div class="lead" data-anim style="max-width:60vw;opacity:.55">SEO × SEM 双引擎增长蓝图 · 从 0 到稳定获客的一年规划</div>
+    <div style="display:flex;gap:1.2vw;margin-top:3vh;flex-wrap:wrap;justify-content:center" data-anim>
+      <span class="tag">PCB / PCBA 制造</span>
+      <span class="tag">B2B 采购获客</span>
+      <span class="tag">冷启动策略</span>
+    </div>
+  </div>
+  <div class="chrome" style="position:relative;z-index:2">
+    <div class="left"><span>封面</span><span class="sep"></span><span>Cover</span></div>
+    <div class="right"><span>01 / 15</span></div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 02 — 核心结论 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="1">
+  <div class="chrome">
+    <div class="left"><span>现状概览</span><span class="sep"></span><span>Overview</span></div>
+    <div class="right"><span>02 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>核心结论</div>
+  <div class="h1-zh" data-anim style="margin-bottom:1.8vh">从零搭建 B2B 搜索获客体系</div>
+  <div class="lead" data-anim style="opacity:.55;margin-bottom:2.4vh">SYHPCB 的搜索基础极度薄弱，需要从网站结构到内容资产全面重建</div>
+  <div class="grid-6" data-anim>
+    <div class="stat"><span class="m">自然搜索流量</span><span class="n">0</span><span class="l">目前尚未形成自然获客入口</span></div>
+    <div class="stat"><span class="m">自然关键词</span><span class="n">3</span><span class="l">关键词覆盖几乎为空白</span></div>
+    <div class="stat"><span class="m">Authority Score</span><span class="n">2</span><span class="l">域名权重极弱</span></div>
+    <div class="stat"><span class="m">引荐域名</span><span class="n">98</span><span class="l">有基础但与竞品差距明显</span></div>
+    <div class="stat"><span class="m">反向链接</span><span class="n">317</span><span class="l">数量有限需加强行业相关性</span></div>
+    <div class="stat"><span class="m">付费广告流量</span><span class="n">0</span><span class="l">广告未启动，可作验证渠道</span></div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>核心结论 · Core Conclusions</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 03 — 现状诊断 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="2">
+  <div class="chrome">
+    <div class="left"><span>现状诊断</span><span class="sep"></span><span>Diagnosis</span></div>
+    <div class="right"><span>03 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Diagnostic</div>
+  <div class="h1-zh" data-anim style="margin-bottom:2vh">当前基线评估</div>
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:2vw;flex:1">
+    <div data-anim>
+      <div class="rowline rowline-2"><span class="k">Authority Score</span><span class="v" style="opacity:.6">2 — 极弱，需内容与外链共同积累</span></div>
+      <div class="rowline rowline-2"><span class="k">自然搜索流量</span><span class="v" style="opacity:.6">0 — 尚未形成自然获客入口</span></div>
+      <div class="rowline rowline-2"><span class="k">自然关键词</span><span class="v" style="opacity:.6">3 — 关键词覆盖几乎为空白</span></div>
+      <div class="rowline rowline-2"><span class="k">付费搜索流量</span><span class="v" style="opacity:.6">0 — 广告未启动，可作验证渠道</span></div>
+      <div class="rowline rowline-2"><span class="k">引荐域名</span><span class="v" style="opacity:.6">98 — 有基础但与竞品差距明显</span></div>
+      <div class="rowline rowline-2"><span class="k">反向链接</span><span class="v" style="opacity:.6">317 — 数量有限需加强行业相关性</span></div>
+    </div>
+    <div data-anim style="display:flex;flex-direction:column;gap:1.2vh">
+      <div class="callout" style="max-width:100%">
+        <div class="q-big" style="font-size:clamp(20px,2.1vw,32px)">当前不是"优化现有流量"，而是从 0 搭建搜索获客体系。</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:.6vw;margin-top:auto">
+        <span class="tag">PCB manufacturing</span>
+        <span class="tag">fabrication</span>
+        <span class="tag">assembly</span>
+        <span class="tag">prototype</span>
+        <span class="tag">供需匹配度高</span>
+      </div>
+      <div style="margin-top:auto;padding:1.2vh 1.2vw;border-left:2px solid rgba(var(--paper-rgb),.2);font-size:clamp(13px,.9vw,17px);opacity:.45">
+        建议以 6-12 个月为周期评估，不承诺短期抢占高竞争泛词
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>现状诊断 · Current Baseline</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 04 — 业务契合度 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="3">
+  <div class="chrome">
+    <div class="left"><span>业务分析</span><span class="sep"></span><span>Business Fit</span></div>
+    <div class="right"><span>04 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>业务契合度</div>
+  <div class="h1-zh" data-anim style="margin-bottom:1.6vh">服务与需求高度匹配</div>
+  <div class="grid-3" style="flex:1" data-anim>
+    <div class="pillar">
+      <div class="ic">01</div>
+      <div class="t">服务能力</div>
+      <div class="d">PCB Manufacturing<br>PCB Assembly<br>PCB Fabrication<br>PCB Prototype</div>
+    </div>
+    <div class="pillar">
+      <div class="ic">02</div>
+      <div class="t">产品 / 材料</div>
+      <div class="d">Flex PCB · HDI PCB<br>Aluminum PCB<br>Multilayer PCB<br>Rigid-Flex PCB</div>
+    </div>
+    <div class="pillar">
+      <div class="ic">03</div>
+      <div class="t">行业应用</div>
+      <div class="d">LED PCB · Automotive PCB<br>Medical PCB<br>Industrial PCB<br>Consumer Electronics</div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>业务契合度 · Business Fit</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 05 — 用户搜索路径 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="4">
+  <div class="chrome">
+    <div class="left"><span>搜索路径</span><span class="sep"></span><span>Search Journey</span></div>
+    <div class="right"><span>05 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Customer Journey</div>
+  <div class="h1-zh" data-anim style="margin-bottom:1.2vh">B2B 采购用户的搜索旅程</div>
+  <div style="display:grid;grid-template-columns:1fr 2fr;gap:2vw;flex:1">
+    <div data-anim style="display:flex;flex-direction:column;gap:.8vh;justify-content:center">
+      <span class="tag">需求识别</span>
+      <span class="tag">信息搜索</span>
+      <span class="tag">方案评估</span>
+      <span class="tag">供应商筛选</span>
+      <span class="tag">采购决策</span>
+    </div>
+    <div data-anim style="display:flex;flex-direction:column;gap:.8vh;justify-content:center">
+      <div class="rowline rowline-2" style="border-top-color:rgba(var(--paper-rgb),.12)"><span class="k">需求识别</span><span class="v">PCB manufacturing services → 核心服务页</span></div>
+      <div class="rowline rowline-2"><span class="k">信息搜索</span><span class="v">flex PCB vs rigid PCB → 技术文章</span></div>
+      <div class="rowline rowline-2"><span class="k">方案评估</span><span class="v">China PCB manufacturer → 制造商页面</span></div>
+      <div class="rowline rowline-2"><span class="k">供应商筛选</span><span class="v">PCB manufacturer UL certified → 认证页面</span></div>
+      <div class="rowline rowline-2"><span class="k">采购决策</span><span class="v">PCB assembly quote online → RFQ 表单</span></div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>搜索路径 · Search Journey</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 06 — B2B 关键词筛选 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="5">
+  <div class="chrome">
+    <div class="left"><span>关键词策略</span><span class="sep"></span><span>Keyword Strategy</span></div>
+    <div class="right"><span>06 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Screening · B2B</div>
+  <div class="h1-zh" data-anim style="margin-bottom:.4vh">B2B 关键词筛选 · 145 词</div>
+  <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:2vw;flex:1">
+    <!-- Left: Core metrics + country distribution -->
+    <div data-anim style="display:flex;flex-direction:column;gap:.5vh;justify-content:center">
+      <!-- Top 3 metrics -->
+      <div style="padding:.8vh 1.2vw;background:rgba(var(--ink-rgb),.04);border-radius:4px">
+        <span class="meta" style="opacity:.4;font-size:clamp(11px,.75vw,14px)">Google Ads 关键词池 · 筛选后</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.2vh .4vw;margin-top:.2vh">
+          <div style="text-align:center"><span class="mid-num" style="font-size:clamp(28px,3.2vw,56px)!important;line-height:1">211,470</span><div class="body-zh" style="font-size:clamp(11px,.9vw,16px);opacity:.45">月均搜索量</div></div>
+          <div style="text-align:center"><span class="mid-num" style="font-size:clamp(28px,3.2vw,56px)!important;line-height:1">38.5%</span><div class="body-zh" style="font-size:clamp(11px,.9vw,16px);opacity:.45">主要搜索国家 (US)</div></div>
+          <div style="text-align:center"><span class="mid-num" style="font-size:clamp(20px,2.4vw,44px)!important;line-height:1">¥7.55 – ¥74.31</span><div class="body-zh" style="font-size:clamp(11px,.9vw,16px);opacity:.45">页首出价区间</div></div>
+        </div>
+      </div>
+      <!-- Country distribution -->
+      <div style="padding:.6vh 1.2vw;background:rgba(var(--ink-rgb),.04);border-radius:4px">
+        <span class="meta" style="opacity:.4;font-size:clamp(11px,.75vw,14px)">流量来源国家 · 分布</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.15vh .4vw;margin-top:.2vh">
+          <div style="display:flex;justify-content:space-between;padding:0 .4vw;font-size:clamp(11px,.85vw,16px)"><span>🇺🇸 美国</span><span style="font-family:'IBM Plex Mono',monospace">38.5%</span></div>
+          <div style="display:flex;justify-content:space-between;padding:0 .4vw;font-size:clamp(11px,.85vw,16px)"><span>🇮🇳 印度</span><span style="font-family:'IBM Plex Mono',monospace">16.6%</span></div>
+          <div style="display:flex;justify-content:space-between;padding:0 .4vw;font-size:clamp(11px,.85vw,16px)"><span>🇬🇧 英国</span><span style="font-family:'IBM Plex Mono',monospace">9.6%</span></div>
+          <div style="display:flex;justify-content:space-between;padding:0 .4vw;font-size:clamp(11px,.85vw,16px)"><span>🇩🇪 德国</span><span style="font-family:'IBM Plex Mono',monospace">3.5%</span></div>
+          <div style="display:flex;justify-content:space-between;padding:0 .4vw;font-size:clamp(11px,.85vw,16px)"><span>🇨🇦 加拿大</span><span style="font-family:'IBM Plex Mono',monospace">2.9%</span></div>
+          <div style="display:flex;justify-content:space-between;padding:0 .4vw;font-size:clamp(11px,.85vw,16px);opacity:.5"><span>其他国家/地区</span><span style="font-family:'IBM Plex Mono',monospace">29.0%</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Right: Cluster priority -->
+    <div data-anim style="display:flex;flex-direction:column;gap:.3vh;justify-content:center">
+      <div class="meta" style="opacity:.3;font-size:clamp(11px,.72vw,14px);margin-bottom:.1vh">9 个聚类 · 按策略优先级排序</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.2vh .5vw">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw;background:rgba(var(--ink-rgb),.06);border-radius:2px"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px);font-weight:500">PCB Assembly / PCBA</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.6);white-space:nowrap">第一优先</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px);font-weight:500">PCB Manufacturing / Fabrication</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.5);white-space:nowrap">第一优先</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw;background:rgba(var(--ink-rgb),.06);border-radius:2px"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px)">Flex / Rigid-Flex PCB</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.5);white-space:nowrap">第二优先</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px)">Custom PCB / Manufacturer</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.5);white-space:nowrap">第二优先</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw;background:rgba(var(--ink-rgb),.06);border-radius:2px"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px)">PCB Prototype / Quick-turn</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.7);white-space:nowrap">高转化方向</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px)">Multilayer PCB</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.45);white-space:nowrap">可作为品类页</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw;background:rgba(var(--ink-rgb),.06);border-radius:2px"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px)">Aluminum / Metal Core PCB</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.45);white-space:nowrap">可作为品类页</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px)">HDI PCB</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.45);white-space:nowrap">可作为品类页</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .5vw;background:rgba(var(--ink-rgb),.06);border-radius:2px"><span class="body-zh" style="font-size:clamp(11px,.85vw,16px)">LED / Application PCB</span><span class="meta" style="font-size:clamp(9px,.6vw,12px);color:rgba(var(--ink-rgb),.45);white-space:nowrap">可作为应用页</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>关键词策略 · Data Source: Google Ads</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 07 — 竞品数据对比 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="6">
+  <div class="chrome">
+    <div class="left"><span>竞品分析</span><span class="sep"></span><span>Competitor Analysis</span></div>
+    <div class="right"><span>07 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Benchmark · 点击行查看截图</div>
+  <div class="h1-zh" data-anim style="font-size:clamp(30px,4.2vw,62px);margin-bottom:1.2vh">SEO 数据横向对比</div>
+  <div style="flex:1;display:flex;flex-direction:column" data-anim>
+    <div class="rowline" style="border-top-color:rgba(var(--paper-rgb),.15)">
+      <span class="k" style="font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,.85vw,17px);text-transform:uppercase;opacity:.4">网站</span>
+      <span class="v" style="display:flex;gap:1vw;font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,.85vw,17px);text-transform:uppercase;opacity:.4">
+        <span style="width:3vw">AS</span>
+        <span style="width:5vw">流量</span>
+        <span style="width:5vw">关键词</span>
+        <span style="width:4vw">付费</span>
+        <span style="width:4vw">域名</span>
+      </span>
+      <span class="m" style="opacity:.4">层级</span>
+    </div>
+    <div class="rowline competitor-row" data-comp="0" style="border-top-color:rgba(var(--paper-rgb),.3);border-top-width:2px;cursor:pointer">
+      <span class="k" style="opacity:1;display:flex;align-items:center;gap:.4vw">SYHPCB <span class="meta shot-hint">📷</span></span>
+      <span class="v" style="display:flex;gap:1vw"><span style="width:3vw">2</span><span style="width:5vw">0</span><span style="width:5vw">3</span><span style="width:4vw">0</span><span style="width:4vw">98</span></span>
+      <span class="m" style="opacity:.8">当前</span>
+    </div>
+    <div class="rowline competitor-row" data-comp="1" style="cursor:pointer">
+      <span class="k" style="display:flex;align-items:center;gap:.4vw">PNC Inc. <span class="meta shot-hint">📷</span></span>
+      <span class="v" style="display:flex;gap:1vw"><span style="width:3vw">17</span><span style="width:5vw">607</span><span style="width:5vw">1.3K</span><span style="width:4vw">0</span><span style="width:4vw">426</span></span>
+      <span class="m">美国制造商</span>
+    </div>
+    <div class="rowline competitor-row" data-comp="2" style="cursor:pointer">
+      <span class="k" style="display:flex;align-items:center;gap:.4vw">Viasion <span class="meta shot-hint">📷</span></span>
+      <span class="v" style="display:flex;gap:1vw"><span style="width:3vw">29</span><span style="width:5vw">5.3K</span><span style="width:5vw">16.4K</span><span style="width:4vw">0</span><span style="width:4vw">1.6K</span></span>
+      <span class="m">中国 PCB/PCBA</span>
+    </div>
+    <div class="rowline competitor-row" data-comp="3" style="cursor:pointer">
+      <span class="k" style="display:flex;align-items:center;gap:.4vw">AdvancedPCB <span class="meta shot-hint">📷</span></span>
+      <span class="v" style="display:flex;gap:1vw"><span style="width:3vw">36</span><span style="width:5vw">13.7K</span><span style="width:5vw">3.6K</span><span style="width:4vw">43</span><span style="width:4vw">2.2K</span></span>
+      <span class="m">美国制造商</span>
+    </div>
+    <div class="rowline competitor-row" data-comp="4" style="cursor:pointer">
+      <span class="k" style="display:flex;align-items:center;gap:.4vw">Multi-CB <span class="meta shot-hint">📷</span></span>
+      <span class="v" style="display:flex;gap:1vw"><span style="width:3vw">34</span><span style="width:5vw">22.7K</span><span style="width:5vw">5.6K</span><span style="width:4vw">113</span><span style="width:4vw">2.1K</span></span>
+      <span class="m">欧洲制造商</span>
+    </div>
+    <div class="rowline competitor-row" data-comp="5" style="cursor:pointer">
+      <span class="k" style="display:flex;align-items:center;gap:.4vw">NextPCB <span class="meta shot-hint">📷</span></span>
+      <span class="v" style="display:flex;gap:1vw"><span style="width:3vw">38</span><span style="width:5vw">36.3K</span><span style="width:5vw">27K</span><span style="width:4vw">311</span><span style="width:4vw">2.3K</span></span>
+      <span class="m">中国 PCB/PCBA</span>
+    </div>
+    <div class="rowline competitor-row" data-comp="6" style="cursor:pointer">
+      <span class="k" style="display:flex;align-items:center;gap:.4vw">JLCPCB <span class="meta shot-hint">📷</span></span>
+      <span class="v" style="display:flex;gap:1vw"><span style="width:3vw">45</span><span style="width:5vw">318.3K</span><span style="width:5vw">32.3K</span><span style="width:4vw">742</span><span style="width:4vw">5.8K</span></span>
+      <span class="m">头部平台</span>
+    </div>
+    <div class="rowline competitor-row" data-comp="7" style="cursor:pointer">
+      <span class="k" style="display:flex;align-items:center;gap:.4vw">PCBCart <span class="meta shot-hint">📷</span></span>
+      <span class="v" style="display:flex;gap:1vw"><span style="width:3vw">33</span><span style="width:5vw">22.4K</span><span style="width:5vw">11K</span><span style="width:4vw">458</span><span style="width:4vw">1.4K</span></span>
+      <span class="m">制造+组装</span>
+    </div>
+  </div>
+  <div style="margin-top:.6vh;font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,.85vw,16px);opacity:.3;text-align:right">Source: Semrush · 点击行查看对应来源截图</div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>竞品分析 · Competitor Benchmark</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 08 — 竞争格局 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="7">
+  <div class="chrome">
+    <div class="left"><span>竞争格局</span><span class="sep"></span><span>Landscape</span></div>
+    <div class="right"><span>08 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Strategy</div>
+  <div class="h1-zh" data-anim style="margin-bottom:1.2vh">三年阶梯式跨越</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2vw;flex:1">
+    <div data-anim style="display:flex;flex-direction:column;justify-content:center">
+      <div class="callout" style="max-width:100%">
+        <div class="q-big" style="font-size:clamp(18px,1.9vw,30px)">第一年不追 JLCPCB 体量，而是先完成从 0 到基础可见度的跨越。</div>
+      </div>
+      <div style="display:flex;gap:.8vw;margin-top:1.2vh;flex-wrap:wrap">
+        <span class="tag" style="border-color:rgba(var(--ink-rgb),.15)">PNC Inc. · 607 流量</span>
+        <span class="tag" style="border-color:rgba(var(--ink-rgb),.15)">第一年目标 benchmark</span>
+        <span class="tag" style="border-color:rgba(var(--ink-rgb),.15)">从 0 到可见度</span>
+      </div>
+    </div>
+    <div data-anim style="display:flex;flex-direction:column;gap:.8vh;justify-content:center">
+      <div class="pillar" style="border:1px solid rgba(var(--ink-rgb),.1);border-radius:4px;padding:1.6vh 1.2vw">
+        <div class="t" style="opacity:.5;font-size:clamp(13px,.9vw,17px)">长期愿景</div>
+        <div class="d">JLCPCB · 318.3K 流量 · 头部平台</div>
+      </div>
+      <div class="pillar" style="border:1px solid rgba(var(--ink-rgb),.1);border-radius:4px;padding:1.6vh 1.2vw">
+        <div class="t" style="opacity:.5;font-size:clamp(13px,.9vw,17px)">第二阶段</div>
+        <div class="d">Viasion · PCBCart · Multi-CB · AdvancedPCB</div>
+      </div>
+      <div class="pillar" style="border:2px solid rgba(var(--ink-rgb),.25);border-radius:4px;padding:1.6vh 1.2vw">
+        <div class="t" style="font-size:clamp(13px,.9vw,17px)">第一年目标</div>
+        <div class="d">PNC Inc. · 607 自然流量 · 基础追赶对象</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>竞争格局 · Competitive Landscape</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 09 — 难度评估 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="8">
+  <div class="chrome">
+    <div class="left"><span>难度评估</span><span class="sep"></span><span>Difficulty</span></div>
+    <div class="right"><span>09 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Challenge & Opportunity</div>
+  <div class="h1-zh" data-anim style="margin-bottom:1.6vh">中高难度 · 破局可期</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2vw;flex:1">
+    <div data-anim>
+      <div style="display:flex;align-items:baseline;gap:1vw;margin-bottom:1.2vh">
+        <span class="big-num" style="font-size:clamp(54px,7.5vw,110px)">8</span>
+        <span class="meta" style="opacity:.4">/ 10 · SEO 中高难度</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.6vh">
+        <div class="rowline rowline-2"><span class="k">当前基础弱</span><span class="v">流量 0，关键词仅 3 个</span></div>
+        <div class="rowline rowline-2"><span class="k">域名权重低</span><span class="v">AS 仅 2，外链需大量增长</span></div>
+        <div class="rowline rowline-2"><span class="k">竞品成熟</span><span class="v">长期布局服务页和技术内容</span></div>
+        <div class="rowline rowline-2"><span class="k">核心词竞争强</span><span class="v">manufacturer / assembly / fabrication</span></div>
+        <div class="rowline rowline-2"><span class="k">内容门槛高</span><span class="v">需展示工艺、认证、交期等多维信息</span></div>
+      </div>
+    </div>
+    <div data-anim>
+      <div style="display:flex;align-items:baseline;gap:1vw;margin-bottom:1.2vh">
+        <span class="big-num" style="font-size:clamp(54px,7.5vw,110px)">7.5</span>
+        <span class="meta" style="opacity:.4">/ 10 · SEM 中高难度</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.6vh">
+        <div class="rowline rowline-2"><span class="k">适合投放</span><span class="v">pcb assembly services · fabrication · quick turn prototype</span></div>
+        <div class="rowline rowline-2"><span class="k">必须排除</span><span class="v">chemical · keyboard · repair · free · tutorial · DIY</span></div>
+      </div>
+      <div style="margin-top:1.2vh;padding:1.2vh 1.2vw;border-left:2px solid rgba(var(--paper-rgb),.2);font-size:clamp(14px,1vw,19px);opacity:.6">
+        破局关键：内容体系重构 + 精准 SEM 投放 + 长尾词突破
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>难度评估 · Difficulty Assessment</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 10 — 执行路线图 (hero light, pipeline) ════════════════ -->
+<section class="slide light hero" data-theme="light" data-animate="pipeline" data-index="9">
+  <div class="chrome">
+    <div class="left"><span>执行规划</span><span class="sep"></span><span>Roadmap</span></div>
+    <div class="right"><span>10 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>12-Month Roadmap</div>
+  <div class="h1-zh" data-anim style="margin-bottom:.6vh">三阶段递进执行</div>
+  <div class="pipeline" data-cols="3" style="flex:1;align-content:center">
+    <div class="step" data-anim="step">
+      <span class="step-num">Phase 01</span>
+      <div class="step-title">第 1-3 个月 · 破冰基础</div>
+      <div class="step-desc">技术 SEO 审计修复 · 索引检查 · 关键词映射策略 · 首页与核心服务页重构 · 转化跟踪部署</div>
+      <div style="margin-top:.8vh;display:flex;gap:.4vw;flex-wrap:wrap">
+        <span class="tag" style="font-size:clamp(12px,.85vw,18px)">底层搭建与修复</span>
+      </div>
+    </div>
+    <div class="step" data-anim="step">
+      <span class="step-num">Phase 02</span>
+      <div class="step-title">第 4-8 个月 · 流量爬坡</div>
+      <div class="step-desc">产品/材料页 6-10 个 · 行业页 2-4 个 · 技术内容 8-12 篇 · 基础外链建设启动</div>
+      <div style="margin-top:.8vh;display:flex;gap:.4vw;flex-wrap:wrap">
+        <span class="tag" style="font-size:clamp(12px,.85vw,18px)">内容爆发 + 外链建设</span>
+      </div>
+    </div>
+    <div class="step" data-anim="step">
+      <span class="step-num">Phase 03</span>
+      <div class="step-title">第 9-12 个月 · 稳定获客</div>
+      <div class="step-desc">GSC + SEM 数据驱动优化 · 高阶内容持续输出 · 外链质量提升 · 转化路径优化</div>
+      <div style="margin-top:.8vh;display:flex;gap:.4vw;flex-wrap:wrap">
+        <span class="tag" style="font-size:clamp(12px,.85vw,18px)">数据优化 + 转化积累</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>执行路线图 · Roadmap</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 11 — 内容体系 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="10">
+  <div class="chrome">
+    <div class="left"><span>内容策略</span><span class="sep"></span><span>Content</span></div>
+    <div class="right"><span>11 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Page Map · 关键词驱动</div>
+  <div class="h1-zh" data-anim style="margin-bottom:.6vh">内容页面优先级</div>
+  <div style="display:grid;grid-template-columns:1fr 1.8fr;gap:2vw;flex:1">
+    <div data-anim style="display:flex;flex-direction:column;gap:.6vh;justify-content:center">
+      <div class="rowline" style="grid-template-columns:1fr 3fr;border-top-color:rgba(var(--paper-rgb),.3)">
+        <span class="k" style="font-size:clamp(14px,1vw,20px);opacity:.8">A 级优先</span>
+        <span class="v" style="font-size:clamp(14px,.95vw,18px);opacity:.6">10 个核心商业页 · 高采购意图</span>
+      </div>
+      <div class="rowline" style="grid-template-columns:1fr 3fr">
+        <span class="k" style="font-size:clamp(14px,1vw,20px);opacity:.5">B 级</span>
+        <span class="v" style="font-size:clamp(14px,.95vw,18px);opacity:.45">品类页 + 行业应用页</span>
+      </div>
+      <div class="rowline" style="grid-template-columns:1fr 3fr;border-bottom-color:rgba(var(--paper-rgb),.3)">
+        <span class="k" style="font-size:clamp(14px,1vw,20px);opacity:.3">C 级</span>
+        <span class="v" style="font-size:clamp(14px,.95vw,18px);opacity:.3">FAQ / 内容引流</span>
+      </div>
+    </div>
+    <div data-anim style="display:flex;flex-direction:column;gap:.3vh;justify-content:center">
+      <div class="meta" style="opacity:.25;font-size:clamp(11px,.72vw,14px);margin-bottom:.2vh">A 级页面 · 核心关键词 → 落地页</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.3vh .6vw">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.07);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">Homepage</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">custom pcb manufacturer</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.04);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">PCB Manufacturing</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">pcb manufacturing</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.07);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">PCB Assembly / PCBA</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">pcb assembly</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.04);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">PCB Prototype</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">pcb prototype</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.07);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">China PCB Manufacturer</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">china pcb manufacturer</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.04);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">Flexible / Flex PCB</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">flexible pcb</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.07);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">Rigid-Flex PCB</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">rigid flex pcb</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.04);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">HDI PCB</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">hdi pcb</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.07);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">Aluminum / Metal Core PCB</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">aluminum pcb</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.25vh .6vw;background:rgba(var(--paper-rgb),.04);border-radius:2px;gap:.4vw"><span class="body-zh" style="font-size:clamp(13px,.9vw,18px)">Multilayer PCB</span><span class="meta" style="font-size:clamp(13px,.85vw,17px);opacity:.4;text-align:right">multilayer pcb</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>内容策略 · Data Source: Semrush + GKP</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 12 — Google Ads 概览 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="11">
+  <div class="chrome">
+    <div class="left"><span>Google Ads 概览</span><span class="sep"></span><span>Market Overview</span></div>
+    <div class="right"><span>12 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Google Ads · B2B PCB</div>
+  <div class="h1-zh" data-anim style="margin-bottom:.3vh;font-size:clamp(26px,3.6vw,52px)">B2B 关键词需求与国家来源</div>
+  <!-- LEFT-RIGHT: cards + screenshot -->
+  <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1.5vw;min-height:0" data-anim>
+    <!-- Left: metric cards -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6vw;align-content:center">
+      <div style="background:rgba(var(--ink-rgb),.04);border-radius:6px;padding:.8vh .5vw;text-align:center">
+        <div class="mid-num" style="font-size:clamp(32px,5.6vw,80px);color:rgba(var(--ink-rgb),.85)">211,470</div>
+        <div style="font-size:clamp(10px,.7vw,14px);opacity:.5;margin-top:.1vh">月均搜索需求</div>
+      </div>
+      <div style="background:rgba(var(--ink-rgb),.04);border-radius:6px;padding:.8vh .5vw;text-align:center">
+        <div class="mid-num" style="font-size:clamp(32px,5.6vw,80px);color:rgba(var(--ink-rgb),.85)">38.5%</div>
+        <div style="font-size:clamp(10px,.7vw,14px);opacity:.5;margin-top:.1vh">美国 · 搜索来源占比</div>
+        <span class="data-anno light" style="margin-top:.2vh">● 最大市场</span>
+      </div>
+      <div style="background:rgba(var(--ink-rgb),.04);border-radius:6px;padding:.8vh .5vw;text-align:center">
+        <div class="mid-num" style="font-size:clamp(32px,5.6vw,80px);color:rgba(var(--ink-rgb),.85)">16.6%</div>
+        <div style="font-size:clamp(10px,.7vw,14px);opacity:.5;margin-top:.1vh">印度 · 搜索来源占比</div>
+      </div>
+      <div style="background:rgba(var(--ink-rgb),.04);border-radius:6px;padding:.8vh .5vw;text-align:center">
+        <div class="mid-num" style="font-size:clamp(32px,5.6vw,80px);color:rgba(var(--ink-rgb),.85)">9.6%</div>
+        <div style="font-size:clamp(10px,.7vw,14px);opacity:.5;margin-top:.1vh">英国 · 搜索来源占比</div>
+      </div>
+      <div style="grid-column:1/-1;font-size:clamp(8px,.55vw,11px);opacity:.35;text-align:center;padding-top:.2vh">所有位置/所有语言/Google · 2025年6月 – 2026年5月</div>
+    </div>
+    <!-- Right: embedded donut chart screenshot -->
+    <div style="display:flex;align-items:center;justify-content:center;background:rgba(var(--ink-rgb),.03);border-radius:6px;overflow:hidden;padding:2px">
+      <img src="seo screenshot/sem_donut.png" alt="Google Ads 国家分布" style="max-width:100%;height:auto;display:block;border-radius:4px">
+    </div>
+  </div>
+  <!-- Conclusion + shot trigger -->
+  <div style="display:flex;gap:.6vw;align-items:center;padding:.3vh 0" data-anim>
+    <span style="font-size:clamp(11px,.8vw,16px);opacity:.65;flex:1;padding-left:.5vw;border-left:2px solid rgba(var(--ink-rgb),.2)">
+      当前关键词搜索需求主要来自美国，其次是印度、英国、德国和加拿大。美国市场应作为第一阶段 SEO 和广告投放的重点方向。
+    </span>
+    <button class="shot-trigger" data-shot="8">📷 查看 Google Ads 原始截图 →</button>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>Google Ads · B2B Keyword Demand</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 13 — 关键词出价 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="12">
+  <div class="chrome">
+    <div class="left"><span>关键词出价</span><span class="sep"></span><span>Bid Ranges</span></div>
+    <div class="right"><span>13 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>High-value B2B Keywords</div>
+  <div class="h1-zh" data-anim style="margin-bottom:.4vh;font-size:clamp(26px,3.6vw,52px)">高价值关键词与出价区间</div>
+  <!-- LEFT-RIGHT: table + screenshot -->
+  <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1.5vw;min-height:0" data-anim>
+    <!-- Left: 8-keyword table -->
+    <div style="display:flex;flex-direction:column;overflow:hidden">
+      <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.35vh .8vw;border-bottom:1px solid rgba(var(--paper-rgb),.15);font-size:clamp(9px,.65vw,12px);text-transform:uppercase;letter-spacing:.06em;opacity:.3;align-items:center;flex-shrink:0">
+        <span>Keyword</span><span style="text-align:right">月均搜索量</span><span style="text-align:center">竞争</span><span style="text-align:right">低位出价 (¥)</span><span style="text-align:right">高位出价 (¥)</span>
+      </div>
+      <div style="flex:1;overflow-y:auto">
+        <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.3vh .8vw;border-bottom:1px solid rgba(var(--paper-rgb),.05);align-items:center;font-size:clamp(10px,.72vw,14px)">
+          <span>pcb manufacturer</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">18,100</span><span style="text-align:center;font-size:clamp(9px,.6vw,12px);opacity:.45">低</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥5.90</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥73.41</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.3vh .8vw;border-bottom:1px solid rgba(var(--paper-rgb),.05);align-items:center;font-size:clamp(10px,.72vw,14px)">
+          <span>printed circuit board manufacturer</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">18,100</span><span style="text-align:center;font-size:clamp(9px,.6vw,12px);opacity:.45">低</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥5.90</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥73.41</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.3vh .8vw;border-bottom:1px solid rgba(var(--paper-rgb),.05);align-items:center;font-size:clamp(10px,.72vw,14px)">
+          <span>circuit board manufacturer</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">18,100</span><span style="text-align:center;font-size:clamp(9px,.6vw,12px);opacity:.45">低</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥5.90</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥73.41</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.3vh .8vw;border-bottom:1px solid rgba(var(--paper-rgb),.05);align-items:center;font-size:clamp(10px,.72vw,14px)">
+          <span>pcb board fabrication</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">18,100</span><span style="text-align:center;font-size:clamp(9px,.6vw,12px);opacity:.45">低</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥5.90</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥73.41</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.3vh .8vw;border-bottom:1px solid rgba(var(--paper-rgb),.05);align-items:center;font-size:clamp(10px,.72vw,14px)">
+          <span>pcb assembly</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">12,100</span><span style="text-align:center;font-size:clamp(9px,.6vw,12px);opacity:.45">低</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥9.82</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥90.47</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.3vh .8vw;border-bottom:1px solid rgba(var(--paper-rgb),.05);align-items:center;font-size:clamp(10px,.72vw,14px)">
+          <span>printed circuit board assembly</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">12,100</span><span style="text-align:center;font-size:clamp(9px,.6vw,12px);opacity:.45">低</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥9.82</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥90.47</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.3vh .8vw;border-bottom:1px solid rgba(var(--paper-rgb),.05);align-items:center;font-size:clamp(10px,.72vw,14px)">
+          <span>circuit board assembly</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">12,100</span><span style="text-align:center;font-size:clamp(9px,.6vw,12px);opacity:.45">低</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥9.82</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥90.47</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr .85fr .5fr .75fr .75fr;gap:0;padding:.3vh .8vw;border-bottom:none;align-items:center;font-size:clamp(10px,.72vw,14px)">
+          <span>pcb assembly manufacturer</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">4,400</span><span style="text-align:center;font-size:clamp(9px,.6vw,12px);opacity:.45">低</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥6.85</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">¥154.67</span>
+        </div>
+      </div>
+    </div>
+    <!-- Right: embedded keyword table screenshot -->
+    <div style="display:flex;align-items:center;justify-content:center;background:rgba(var(--paper-rgb),.03);border-radius:6px;overflow:hidden;padding:2px">
+      <img src="seo screenshot/sem_table.png" alt="Google Ads 关键词数据" style="max-width:100%;height:auto;display:block;border-radius:4px">
+    </div>
+  </div>
+  <!-- Conclusion + Shot trigger -->
+  <div style="display:flex;gap:.6vw;align-items:center;margin-top:.3vh" data-anim>
+    <div style="padding:.4vh 1vw;border-left:2px solid rgba(var(--paper-rgb),.2);font-size:clamp(12px,.85vw,16px);opacity:.5;flex:1">
+      PCB Manufacturer、PCB Fabrication 和 PCB Assembly 相关词搜索量高，同时具备明确采购意图，适合作为第一阶段重点优化页面。高出价词可同步用于广告测试。
+    </div>
+    <button class="shot-trigger dark" data-shot="8">📷 查看 Google Ads 截图</button>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>关键词出价 · B2B CPC Signals</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 14 — 指标预期 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="13" style="font-size:clamp(16px,1.3vw,22px)">
+  <div class="chrome">
+    <div class="left"><span>指标预期</span><span class="sep"></span><span>KPIs</span></div>
+    <div class="right"><span>14 / 15</span></div>
+  </div>
+  <div class="kicker" data-anim>Targets · 第一年核心交付</div>
+  <div class="h1-zh" data-anim style="font-size:clamp(30px,4.2vw,62px);margin-bottom:1.6vh">第一年关键指标</div>
+
+  <!-- 4 项核心指标 — 2×2 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.6vw;flex:1;align-content:center" data-anim>
+    <div style="background:rgba(var(--ink-rgb),.04);border-radius:6px;padding:1.6vh 1.6vw;text-align:center;border-left:4px solid rgba(var(--ink-rgb),.35)">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,.85vw,17px);text-transform:uppercase;letter-spacing:.1em;opacity:.4;margin-bottom:.4vh">博客内容产量</div>
+      <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(52px,6.2vw,92px);line-height:1.1">60<span style="font-size:.45em;opacity:.4;font-family:'Noto Sans SC',sans-serif"> 篇/年</span></div>
+      <div style="font-size:clamp(14px,1.05vw,20px);opacity:.45;margin-top:.2vh">平均 5 篇/月 · 覆盖服务/产品/技术/行业</div>
+    </div>
+    <div style="background:rgba(var(--ink-rgb),.04);border-radius:6px;padding:1.6vh 1.6vw;text-align:center;border-left:4px solid rgba(var(--ink-rgb),.35)">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,.85vw,17px);text-transform:uppercase;letter-spacing:.1em;opacity:.4;margin-bottom:.4vh">外链建设</div>
+      <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(52px,6.2vw,92px);line-height:1.1">150<span style="font-size:.45em;opacity:.4;font-family:'Noto Sans SC',sans-serif"> 条</span></div>
+      <div style="font-size:clamp(14px,1.05vw,20px);opacity:.45;margin-top:.2vh">行业相关引荐 · 提升域名权重</div>
+    </div>
+    <div style="background:rgba(var(--ink-rgb),.04);border-radius:6px;padding:1.6vh 1.6vw;text-align:center;border-left:4px solid rgba(var(--ink-rgb),.35)">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,.85vw,17px);text-transform:uppercase;letter-spacing:.1em;opacity:.4;margin-bottom:.4vh">前两页关键词</div>
+      <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(52px,6.2vw,92px);line-height:1.1">30<span style="font-size:.45em;opacity:.4;font-family:'Noto Sans SC',sans-serif"> 个</span></div>
+      <div style="font-size:clamp(14px,1.05vw,20px);opacity:.45;margin-top:.2vh">Google 前 2 页 · 覆盖 A 级核心采购词</div>
+    </div>
+    <div style="background:rgba(var(--ink-rgb),.04);border-radius:6px;padding:1.6vh 1.6vw;text-align:center;border-left:4px solid rgba(var(--ink-rgb),.35)">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,.85vw,17px);text-transform:uppercase;letter-spacing:.1em;opacity:.4;margin-bottom:.4vh">总自然关键词</div>
+      <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(52px,6.2vw,92px);line-height:1.1">300<span style="font-size:.45em;opacity:.4;font-family:'Noto Sans SC',sans-serif"> 个</span></div>
+      <div style="font-size:clamp(14px,1.05vw,20px);opacity:.45;margin-top:.2vh">含 174 个定向 B2B 词 · 从 3 起步</div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>指标预期 · KPI Targets</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 15 — THANK YOU (hero dark) ════════════════ -->
+<section class="slide dark hero" data-theme="dark" data-index="14">
+  <div class="ghost" style="left:-6vw;bottom:-14vh">SYHPCB</div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;z-index:2">
+    <div class="kicker" data-anim style="margin-bottom:1.5vh">Summary</div>
+    <div class="display-zh" data-anim style="font-size:clamp(34px,5.6vw,82px);margin-bottom:1.5vh">SEO + SEM <span style="opacity:.55">组合执行</span></div>
+    <div class="lead" data-anim style="max-width:50vw;opacity:.5;margin-bottom:2.4vh">按冷启动项目精密规划，长线打造稳定健康的 B2B 搜索获客体系</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8vw 1.6vw;max-width:45vw" data-anim>
+      <div style="padding:.6vh 0;border-bottom:1px solid rgba(var(--paper-rgb),.08);text-align:left"><span class="meta" style="opacity:.3">SEO</span><div style="font-size:clamp(13px,.95vw,18px);margin-top:.2vh">长期获客主线 · 建设关键词资产</div></div>
+      <div style="padding:.6vh 0;border-bottom:1px solid rgba(var(--paper-rgb),.08);text-align:left"><span class="meta" style="opacity:.3">SEM</span><div style="font-size:clamp(13px,.95vw,18px);margin-top:.2vh">前期精准测试 · 验证高价值 B2B 词</div></div>
+      <div style="padding:.6vh 0;text-align:left"><span class="meta" style="opacity:.3">内容</span><div style="font-size:clamp(13px,.95vw,18px);margin-top:.2vh">承接采购决策 · 覆盖全链路搜索需求</div></div>
+      <div style="padding:.6vh 0;text-align:left"><span class="meta" style="opacity:.3">外链</span><div style="font-size:clamp(13px,.95vw,18px);margin-top:.2vh">提升域名权重 · 增强行业信任</div></div>
+    </div>
+    <div data-anim style="margin-top:2.4vh;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(20px,2.2vw,36px);opacity:.35">Thank You</div>
+  </div>
+  <div class="chrome" style="position:relative;z-index:2">
+    <div class="left"><span>结尾</span><span class="sep"></span><span>End</span></div>
+    <div class="right"><span>15 / 15</span></div>
+  </div>
+</section>
+
+</div><!-- /#p -->
+
+<!-- ═══ Navigation ═══ -->
+<div id="nav">
+  <button id="prevBtn">←</button>
+  <span id="pageIndicator" style="font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.1vw,19px);opacity:.35;min-width:4ch;text-align:center">01/15</span>
+  <div class="dots" id="navDots"></div>
+  <button id="nextBtn">→</button>
+</div>
+
+<!-- ═══ Index overlay ═══ -->
+<div id="index">
+  <button id="index-close">×</button>
+  <div class="grid" id="indexGrid"></div>
+</div>
+
+<!-- ═══ Screenshot Viewer ═══ -->
+<div id="shotView">
+  <button class="viewer-close" id="shotClose">×</button>
+  <img class="viewer-img" id="shotImg" alt="Competitor screenshot">
+  <div class="viewer-label" id="shotLabel"></div>
+  <div class="viewer-nav">
+    <button id="shotPrev">← 上一张</button>
+    <span class="counter" id="shotCounter"></span>
+    <button id="shotNext">下一张 →</button>
+  </div>
+</div>
+
+<script>
+// ═══ Lucide Icons ═══
+if(typeof lucide!=='undefined') lucide.createIcons();
+
+// ═══ Slide Navigation ═══
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const dots = document.getElementById('navDots');
+  const prev = document.getElementById('prevBtn');
+  const next = document.getElementById('nextBtn');
+  let cur = 0;
+
+  for(let i=0;i<total;i++){
+    const d=document.createElement('button');
+    d.className='dot'+(i===0?' active':'');
+    d.addEventListener('click',()=>go(i));
+    dots.appendChild(d);
+  }
+
+  const pageInd=document.getElementById('pageIndicator');
+  function go(i){
+    if(i<0||i>=total) return;
+    slides.forEach(s=>s.classList.remove('active'));
+    slides[i].classList.add('active');
+    document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+    cur=i;
+    pageInd.textContent=String(i+1).padStart(2,'0')+'/'+String(total).padStart(2,'0');
+  }
+
+  prev.addEventListener('click',()=>go(cur-1));
+  next.addEventListener('click',()=>go(cur+1));
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();go(cur-1)}
+    if(e.key==='Escape'){document.getElementById('index').classList.remove('show')}
+  });
+
+  let tx=0;
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX});
+  document.addEventListener('touchend',e=>{
+    const d=tx-e.changedTouches[0].clientX;
+    if(Math.abs(d)>50) d>0?go(cur+1):go(cur-1);
+  });
+
+  let scrollTimer;
+  document.addEventListener('wheel',e=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      if(e.deltaY>0) go(cur+1);
+      else go(cur-1);
+    },100);
+  },{passive:true});
+
+  // ═══ Index overlay ═══
+  const indexDiv=document.getElementById('index');
+  const indexGrid=document.getElementById('indexGrid');
+  const labels=[
+    '封面','核心结论','现状诊断','业务契合度','搜索路径',
+    '关键词漏斗','竞品对比','竞争格局','难度评估','执行路线图',
+    '内容体系','Google Ads 概览','关键词出价','指标预期','总结'
+  ];
+  const enLabels=[
+    'Cover','Conclusions','Diagnosis','Business Fit','Search Journey',
+    'Keyword Funnel','Benchmark','Landscape','Difficulty','Roadmap',
+    'Content','Market Overview','Bid Ranges','KPIs','Summary'
+  ];
+  labels.forEach((l,i)=>{
+    const item=document.createElement('div');
+    item.className='item';
+    item.innerHTML='<div class="num">'+(i+1)+'</div><div class="label">'+l+'<br><span style="opacity:.35;font-size:.75em">'+enLabels[i]+'</span></div>';
+    item.addEventListener('click',()=>{go(i);indexDiv.classList.remove('show')});
+    indexGrid.appendChild(item);
+  });
+
+  // Toggle index with I key or Escape
+  document.addEventListener('keydown',e=>{
+    if(e.key==='i'||e.key==='I'||e.key==='Escape'){
+      if(e.key==='Escape') indexDiv.classList.remove('show');
+      else indexDiv.classList.toggle('show');
+    }
+  });
+})();
+
+// ═══ WebGL Shader ═══
+(function(){
+  const canvas=document.getElementById('webgl');
+  const gl=canvas.getContext('webgl');
+  if(!gl) return;
+
+  function resize(){
+    const w=window.innerWidth;
+    const h=window.innerHeight;
+    canvas.width=w;canvas.height=h;
+    gl.viewport(0,0,w,h);
+  }
+  window.addEventListener('resize',resize);
+  resize();
+
+  const vs=`attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}`;
+
+  const fs=`precision highp float;
+uniform float t;
+uniform vec2 r;
+
+void main(){
+  vec2 uv=gl_FragCoord.xy/r;
+  float cx=uv.x-.5;
+  float cy=uv.y-.5;
+  float d=sqrt(cx*cx+cy*cy);
+
+  float wave=sin(cx*8.+t*.3)*cos(cy*6.-t*.4)*.5+.5;
+  float rad=atan(cy,cx);
+  float spiral=sin(rad*3.+d*12.-t*.5)*.5+.5;
+
+  float a=mix(wave,spiral,.3+d*.4);
+
+  float r2=.04+.06*sin(d*8.-t*.6);
+  float g2=.07+.07*cos(cx*6.+t*.4);
+  float b2=.14+.08*sin(cy*6.+t*.5);
+
+  float rr=mix(.04,.06,r2)+.02*a;
+  float gg=mix(.07,.10,g2)+.02*a;
+  float bb=mix(.14,.18,b2)+.03*a;
+
+  // vignette
+  float vig=1.-d*d*.5;
+  gl_FragColor=vec4(rr*vig,gg*vig,bb*vig,1);
+}`;
+
+  const prog=gl.createProgram();
+  const vsShader=gl.createShader(gl.VERTEX_SHADER);
+  gl.shaderSource(vsShader,vs);
+  gl.compileShader(vsShader);
+  gl.attachShader(prog,vsShader);
+
+  const fsShader=gl.createShader(gl.FRAGMENT_SHADER);
+  gl.shaderSource(fsShader,fs);
+  gl.compileShader(fsShader);
+  gl.attachShader(prog,fsShader);
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  const buf=gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  const loc=gl.getAttribLocation(prog,'p');
+  gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  gl.enableVertexAttribArray(loc);
+
+  const tLoc=gl.getUniformLocation(prog,'t');
+  const rLoc=gl.getUniformLocation(prog,'r');
+
+  let start=performance.now();
+  function frame(){
+    gl.uniform1f(tLoc,(performance.now()-start)/1000);
+    gl.uniform2f(rLoc,canvas.width,canvas.height);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// ═══ Animation Engine (CSS-based fallback for simpler cascade) ═══
+(function(){
+  const slides=document.querySelectorAll('.slide');
+  slides.forEach(slide=>{
+    const els=slide.querySelectorAll('[data-anim]');
+    const isPipeline=slide.getAttribute('data-animate')==='pipeline';
+    if(isPipeline) return;
+
+    els.forEach((el,i)=>{
+      const delay=75*i;
+      el.style.opacity='0';
+      el.style.transform='translateY(8px)';
+      el.style.transition='opacity .5s ease, transform .5s ease';
+      el.style.transitionDelay=delay+'ms';
+    });
+  });
+
+  function revealSlide(slide){
+    const isPipeline=slide.getAttribute('data-animate')==='pipeline';
+    if(isPipeline) return;
+    slide.querySelectorAll('[data-anim]').forEach(el=>{
+      el.style.opacity='1';
+      el.style.transform='translateY(0)';
+      setTimeout(()=>{
+        el.style.transition='';
+        el.style.transitionDelay='';
+      },800);
+    });
+  }
+
+  // Reveal initial active slide immediately
+  const activeSlide=document.querySelector('.slide.active');
+  if(activeSlide) revealSlide(activeSlide);
+
+  // Observer to trigger on slide changes
+  const observer=new MutationObserver(()=>{
+    document.querySelectorAll('.slide.active').forEach(revealSlide);
+  });
+  document.querySelectorAll('.slide').forEach(s=>observer.observe(s,{attributes:true,attributeFilter:['class']}));
+
+  // Pipeline step handling
+  let pipelineStep=0;
+  document.addEventListener('keydown',e=>{
+    const activeSlide=document.querySelector('.slide.active');
+    if(!activeSlide||activeSlide.getAttribute('data-animate')!=='pipeline') return;
+    const steps=activeSlide.querySelectorAll('[data-anim="step"]');
+    if(!steps.length) return;
+
+    if(e.key==='ArrowRight'||e.key===' '){
+      e.preventDefault();
+      if(pipelineStep<steps.length){
+        steps[pipelineStep].style.opacity='1';
+        pipelineStep++;
+      }
+    }
+    if(e.key==='ArrowLeft'){
+      if(pipelineStep>0){
+        pipelineStep--;
+        steps[pipelineStep].style.opacity='';
+      }
+    }
+  });
+
+  // Reset pipeline on slide change
+  document.querySelectorAll('#prevBtn,#nextBtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{pipelineStep=0;});
+  });
+})();
+
+// ═══ Screenshot Viewer ═══
+(function(){
+  const competitors=[
+    {name:'SYHPCB — 当前状态', file:'syh.png'},
+    {name:'PNC Inc. — 美国制造商', file:'pncoline.png'},
+    {name:'Viasion — 中国 PCB/PCBA', file:'viasion.png'},
+    {name:'AdvancedPCB — 美国制造商', file:'advancedpcb.png'},
+    {name:'Multi-CB — 欧洲制造商', file:'multi circuit board.png'},
+    {name:'NextPCB — 中国 PCB/PCBA', file:'nextpcb.png'},
+    {name:'JLCPCB — 头部平台', file:'jlicpcb.png'},
+    {name:'PCBCart — 制造+组装', file:'pcbcart.png'},
+    {name:'📊 Google Ads — B2B 关键词原始数据', file:'sem_keywords_6.png'}
+  ];
+  const SHOT_PATH='seo screenshot/';
+  const view=document.getElementById('shotView');
+  const img=document.getElementById('shotImg');
+  const label=document.getElementById('shotLabel');
+  const counter=document.getElementById('shotCounter');
+  const close=document.getElementById('shotClose');
+  const prev=document.getElementById('shotPrev');
+  const next=document.getElementById('shotNext');
+  let curIdx=0;
+
+  function showShot(i){
+    if(i<0||i>=competitors.length) return;
+    curIdx=i;
+    img.src=SHOT_PATH+competitors[i].file;
+    img.onerror=function(){this.src='';this.alt='截图未找到: '+competitors[i].file;label.textContent='⚠️ 截图文件未找到: '+competitors[i].file;counter.textContent=(i+1)+'/'+competitors.length};
+    label.textContent=competitors[i].name;
+    counter.textContent=(i+1)+'/'+competitors.length;
+    view.classList.add('show');
+  }
+
+  document.querySelectorAll('.competitor-row').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const i=parseInt(el.getAttribute('data-comp'));
+      if(!isNaN(i)) showShot(i);
+    });
+  });
+
+  document.querySelectorAll('.shot-trigger').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const i=parseInt(el.getAttribute('data-shot'));
+      if(!isNaN(i)) showShot(i);
+    });
+  });
+
+  close.addEventListener('click',()=>view.classList.remove('show'));
+  prev.addEventListener('click',()=>showShot(curIdx-1));
+  next.addEventListener('click',()=>showShot(curIdx+1));
+
+  document.addEventListener('keydown',e=>{
+    if(!view.classList.contains('show')) return;
+    if(e.key==='Escape') view.classList.remove('show');
+    if(e.key==='ArrowLeft') showShot(curIdx-1);
+    if(e.key==='ArrowRight') showShot(curIdx+1);
+  });
+
+  // Click outside image to close
+  view.addEventListener('click',e=>{if(e.target===view) view.classList.remove('show')});
+})();
+</script>
+</body>
+</html>
+

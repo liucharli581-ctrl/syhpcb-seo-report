@@ -1,0 +1,27 @@
+﻿SYHPCB B2B Keyword Screening,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4
+Client site,https://syhpcb.com/,,,
+Data files,pcb_all-keywords_us_2026-07-08.csv; Keyword Stats 2026-07-08 at 09_52_35.csv,,,
+Screening logic,保留 PCB 制造、打样、装配、供应商、材料/品类、行业应用等 B2B 采购意图；排除 Panama City Beach、化学 PCB、多义词、DIY/学习/招聘/竞品品牌等噪音。,,,
+Recommended total,174,,,
+A 核心优先,80,,,
+B 次优先,80,,,
+C 内容/FAQ,14,,,
+Main recommendation,先做/重写 5 个核心商业页：Custom PCB Manufacturer、PCB Fabrication、PCB Assembly/PCBA、PCB Prototype/Quick-turn、China PCB Manufacturer；再扩展 Flex/Rigid-Flex/HDI/Aluminum/FR4/Multilayer 等品类页。,,,
+,,,,
+,,,,
+Cluster,Keywords,,Priority,Count
+PCB Assembly / PCBA,33,,A 核心优先,80
+Flex / Rigid-Flex PCB,25,,B 次优先,80
+Specialty PCB Materials,17,,C 内容/FAQ,14
+PCB Manufacturing / Fabrication,16,,,
+Aluminum / Metal Core PCB,12,,,
+PCB Prototype / Quick-turn,10,,,
+Industries,10,,,
+Content / FAQ,9,,,
+Copper / Heavy Copper PCB,8,,,
+Multilayer PCB,7,,,
+China Supplier / Export,6,,,
+HDI PCB,6,,,
+LED / Application PCB,6,,,
+Custom PCB / Manufacturer,5,,,
+FR4 PCB,4,,,
