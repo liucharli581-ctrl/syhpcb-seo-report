@@ -258,6 +258,7 @@ figure.tile{margin:0}
 }
 #nav .dot.active{opacity:.7;width:clamp(12px,1.2vw,20px);border-radius:4px;background:rgba(var(--brand-rgb),.7)}
 #nav .dot:hover{opacity:.5}
+#tocBtn:hover{background:rgba(var(--brand-rgb),.08)!important;color:rgba(var(--brand-rgb),.8)!important;border-color:rgba(var(--brand-rgb),.3)!important}
 
 /* ── Index overlay ── */
 #index{
@@ -428,6 +429,48 @@ figure.tile{margin:0}
   background:rgba(var(--paper-rgb),.04) !important;
 }
 
+
+/* ── TOC Grid ── */
+.toc-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:.8vw;flex:1;align-content:center;
+  max-width:70vw;margin:0 auto;
+}
+.toc-item{
+  display:flex;align-items:center;gap:.8vw;
+  padding:1.6vh 1.2vw;
+  border:1px solid rgba(var(--ink-rgb),.1);
+  border-radius:6px;
+  cursor:pointer;
+  transition:all .25s ease;
+  background:rgba(var(--ink-rgb),.02);
+}
+.toc-item:hover{
+  background:rgba(var(--brand-rgb),.06);
+  border-color:rgba(var(--brand-rgb),.2);
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(var(--brand-rgb),.08);
+}
+.toc-num{
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  font-size:clamp(22px,2.4vw,40px);
+  opacity:.3;
+  flex-shrink:0;
+  line-height:1;
+  min-width:2.2ch;
+}
+.toc-label{display:flex;flex-direction:column;gap:.1vh}
+.toc-zh{font-family:'Noto Sans SC',sans-serif;font-weight:500;font-size:clamp(14px,1.2vw,24px);line-height:1.3}
+.toc-en{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.72vw,15px);opacity:.4;text-transform:uppercase;letter-spacing:.04em}
+@media(max-width:768px){
+  .toc-grid{grid-template-columns:repeat(2,1fr);gap:1.2vw;max-width:95vw}
+  .toc-item{padding:1.2vh 1vw}
+  .toc-num{font-size:clamp(18px,3.2vw,28px);min-width:1.8ch}
+  .toc-zh{font-size:clamp(12px,2.2vw,18px)}
+  .toc-en{font-size:clamp(9px,1.6vw,13px)}
+}
+
 /* ── Responsive ── */
 @media(max-width:768px){
   .slide{padding:3vh 3.2vw 8vh}
@@ -464,15 +507,47 @@ figure.tile{margin:0}
   </div>
   <div class="chrome" style="position:relative;z-index:2">
     <div class="left"><span>封面</span><span class="sep"></span><span>Cover</span></div>
-    <div class="right"><span>01 / 15</span></div>
+    <div class="right"><span>01 / 16</span></div>
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 02 — 核心结论 (light) ════════════════ -->
+<!-- ════════════════ SLIDE 02 — 目录 (light) ════════════════ -->
 <section class="slide light" data-theme="light" data-index="1">
   <div class="chrome">
+    <div class="left"><span>目录</span><span class="sep"></span><span>Contents</span></div>
+    <div class="right"><span>02 / 16</span></div>
+  </div>
+  <div class="kicker" data-anim>Table of Contents</div>
+  <div class="h1-zh" data-anim style="margin-bottom:1.2vh">搜索增长蓝图 · 目录</div>
+  <div class="toc-grid" data-anim>
+    <div class="toc-item" data-slide="0"><span class="toc-num">01</span><div class="toc-label"><span class="toc-zh">封面</span><span class="toc-en">Cover</span></div></div>
+    <div class="toc-item" data-slide="1"><span class="toc-num">02</span><div class="toc-label"><span class="toc-zh">目录</span><span class="toc-en">Contents</span></div></div>
+    <div class="toc-item" data-slide="2"><span class="toc-num">03</span><div class="toc-label"><span class="toc-zh">核心结论</span><span class="toc-en">Core Conclusions</span></div></div>
+    <div class="toc-item" data-slide="3"><span class="toc-num">04</span><div class="toc-label"><span class="toc-zh">现状诊断</span><span class="toc-en">Current Diagnosis</span></div></div>
+    <div class="toc-item" data-slide="4"><span class="toc-num">05</span><div class="toc-label"><span class="toc-zh">业务契合度</span><span class="toc-en">Business Fit</span></div></div>
+    <div class="toc-item" data-slide="5"><span class="toc-num">06</span><div class="toc-label"><span class="toc-zh">搜索路径</span><span class="toc-en">Search Journey</span></div></div>
+    <div class="toc-item" data-slide="6"><span class="toc-num">07</span><div class="toc-label"><span class="toc-zh">关键词漏斗</span><span class="toc-en">Keyword Funnel</span></div></div>
+    <div class="toc-item" data-slide="7"><span class="toc-num">08</span><div class="toc-label"><span class="toc-zh">竞品对比</span><span class="toc-en">Competitor Benchmark</span></div></div>
+    <div class="toc-item" data-slide="8"><span class="toc-num">09</span><div class="toc-label"><span class="toc-zh">竞争格局</span><span class="toc-en">Competitive Landscape</span></div></div>
+    <div class="toc-item" data-slide="9"><span class="toc-num">10</span><div class="toc-label"><span class="toc-zh">难度评估</span><span class="toc-en">Difficulty Assessment</span></div></div>
+    <div class="toc-item" data-slide="10"><span class="toc-num">11</span><div class="toc-label"><span class="toc-zh">执行路线图</span><span class="toc-en">12-Month Roadmap</span></div></div>
+    <div class="toc-item" data-slide="11"><span class="toc-num">12</span><div class="toc-label"><span class="toc-zh">内容体系</span><span class="toc-en">Content Strategy</span></div></div>
+    <div class="toc-item" data-slide="12"><span class="toc-num">13</span><div class="toc-label"><span class="toc-zh">Google Ads 概览</span><span class="toc-en">Market Overview</span></div></div>
+    <div class="toc-item" data-slide="13"><span class="toc-num">14</span><div class="toc-label"><span class="toc-zh">关键词出价</span><span class="toc-en">Bid Ranges</span></div></div>
+    <div class="toc-item" data-slide="14"><span class="toc-num">15</span><div class="toc-label"><span class="toc-zh">指标预期</span><span class="toc-en">KPI Targets</span></div></div>
+    <div class="toc-item" data-slide="15"><span class="toc-num">16</span><div class="toc-label"><span class="toc-zh">总结</span><span class="toc-en">Summary</span></div></div>
+  </div>
+  <div class="foot">
+    <div>SYHPCB · Search Growth Blueprint</div>
+    <div>目录 · Table of Contents</div>
+  </div>
+</section>
+
+<!-- ════════════════ SLIDE 03 — 核心结论 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="2">
+  <div class="chrome">
     <div class="left"><span>现状概览</span><span class="sep"></span><span>Overview</span></div>
-    <div class="right"><span>02 / 15</span></div>
+    <div class="right"><span>03 / 16</span></div>
   </div>
   <div class="kicker" data-anim>核心结论</div>
   <div class="h1-zh" data-anim style="margin-bottom:1.8vh">从零搭建 B2B 搜索获客体系</div>
@@ -491,11 +566,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 03 — 现状诊断 (dark) ════════════════ -->
-<section class="slide dark" data-theme="dark" data-index="2">
+<!-- ════════════════ SLIDE 04 — 现状诊断 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="3">
   <div class="chrome">
     <div class="left"><span>现状诊断</span><span class="sep"></span><span>Diagnosis</span></div>
-    <div class="right"><span>03 / 15</span></div>
+    <div class="right"><span>04 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Diagnostic</div>
   <div class="h1-zh" data-anim style="margin-bottom:2vh">当前基线评估</div>
@@ -530,11 +605,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 04 — 业务契合度 (light) ════════════════ -->
-<section class="slide light" data-theme="light" data-index="3">
+<!-- ════════════════ SLIDE 05 — 业务契合度 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="4">
   <div class="chrome">
     <div class="left"><span>业务分析</span><span class="sep"></span><span>Business Fit</span></div>
-    <div class="right"><span>04 / 15</span></div>
+    <div class="right"><span>05 / 16</span></div>
   </div>
   <div class="kicker" data-anim>业务契合度</div>
   <div class="h1-zh" data-anim style="margin-bottom:1.6vh">服务与需求高度匹配</div>
@@ -561,11 +636,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 05 — 用户搜索路径 (dark) ════════════════ -->
-<section class="slide dark" data-theme="dark" data-index="4">
+<!-- ════════════════ SLIDE 06 — 用户搜索路径 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="5">
   <div class="chrome">
     <div class="left"><span>搜索路径</span><span class="sep"></span><span>Search Journey</span></div>
-    <div class="right"><span>05 / 15</span></div>
+    <div class="right"><span>06 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Customer Journey</div>
   <div class="h1-zh" data-anim style="margin-bottom:1.2vh">B2B 采购用户的搜索旅程</div>
@@ -591,11 +666,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 06 — B2B 关键词筛选 (light) ════════════════ -->
-<section class="slide light" data-theme="light" data-index="5">
+<!-- ════════════════ SLIDE 07 — B2B 关键词筛选 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="6">
   <div class="chrome">
     <div class="left"><span>关键词策略</span><span class="sep"></span><span>Keyword Strategy</span></div>
-    <div class="right"><span>06 / 15</span></div>
+    <div class="right"><span>07 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Screening · B2B</div>
   <div class="h1-zh" data-anim style="margin-bottom:.4vh">B2B 关键词筛选 · 145 词</div>
@@ -646,11 +721,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 07 — 竞品数据对比 (dark) ════════════════ -->
-<section class="slide dark" data-theme="dark" data-index="6">
+<!-- ════════════════ SLIDE 08 — 竞品数据对比 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="7">
   <div class="chrome">
     <div class="left"><span>竞品分析</span><span class="sep"></span><span>Competitor Analysis</span></div>
-    <div class="right"><span>07 / 15</span></div>
+    <div class="right"><span>08 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Benchmark · 点击行查看截图</div>
   <div class="h1-zh" data-anim style="font-size:clamp(30px,4.2vw,62px);margin-bottom:1.2vh">SEO 数据横向对比</div>
@@ -714,11 +789,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 08 — 竞争格局 (light) ════════════════ -->
-<section class="slide light" data-theme="light" data-index="7">
+<!-- ════════════════ SLIDE 09 — 竞争格局 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="8">
   <div class="chrome">
     <div class="left"><span>竞争格局</span><span class="sep"></span><span>Landscape</span></div>
-    <div class="right"><span>08 / 15</span></div>
+    <div class="right"><span>09 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Strategy</div>
   <div class="h1-zh" data-anim style="margin-bottom:1.2vh">三年阶梯式跨越</div>
@@ -754,11 +829,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 09 — 难度评估 (dark) ════════════════ -->
-<section class="slide dark" data-theme="dark" data-index="8">
+<!-- ════════════════ SLIDE 10 — 难度评估 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="9">
   <div class="chrome">
     <div class="left"><span>难度评估</span><span class="sep"></span><span>Difficulty</span></div>
-    <div class="right"><span>09 / 15</span></div>
+    <div class="right"><span>10 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Challenge & Opportunity</div>
   <div class="h1-zh" data-anim style="margin-bottom:1.6vh">中高难度 · 破局可期</div>
@@ -796,11 +871,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 10 — 执行路线图 (hero light, pipeline) ════════════════ -->
-<section class="slide light hero" data-theme="light" data-animate="pipeline" data-index="9">
+<!-- ════════════════ SLIDE 11 — 执行路线图 (hero light, pipeline) ════════════════ -->
+<section class="slide light hero" data-theme="light" data-animate="pipeline" data-index="10">
   <div class="chrome">
     <div class="left"><span>执行规划</span><span class="sep"></span><span>Roadmap</span></div>
-    <div class="right"><span>10 / 15</span></div>
+    <div class="right"><span>11 / 16</span></div>
   </div>
   <div class="kicker" data-anim>12-Month Roadmap</div>
   <div class="h1-zh" data-anim style="margin-bottom:.6vh">三阶段递进执行</div>
@@ -836,11 +911,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 11 — 内容体系 (dark) ════════════════ -->
-<section class="slide dark" data-theme="dark" data-index="10">
+<!-- ════════════════ SLIDE 12 — 内容体系 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="11">
   <div class="chrome">
     <div class="left"><span>内容策略</span><span class="sep"></span><span>Content</span></div>
-    <div class="right"><span>11 / 15</span></div>
+    <div class="right"><span>12 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Page Map · 关键词驱动</div>
   <div class="h1-zh" data-anim style="margin-bottom:.6vh">内容页面优先级</div>
@@ -881,11 +956,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 12 — Google Ads 概览 (light) ════════════════ -->
-<section class="slide light" data-theme="light" data-index="11">
+<!-- ════════════════ SLIDE 13 — Google Ads 概览 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="12">
   <div class="chrome">
     <div class="left"><span>Google Ads 概览</span><span class="sep"></span><span>Market Overview</span></div>
-    <div class="right"><span>12 / 15</span></div>
+    <div class="right"><span>13 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Google Ads · B2B PCB</div>
   <div class="h1-zh" data-anim style="margin-bottom:.3vh;font-size:clamp(26px,3.6vw,52px)">B2B 关键词需求与国家来源</div>
@@ -930,11 +1005,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 13 — 关键词出价 (dark) ════════════════ -->
-<section class="slide dark" data-theme="dark" data-index="12">
+<!-- ════════════════ SLIDE 14 — 关键词出价 (dark) ════════════════ -->
+<section class="slide dark" data-theme="dark" data-index="13">
   <div class="chrome">
     <div class="left"><span>关键词出价</span><span class="sep"></span><span>Bid Ranges</span></div>
-    <div class="right"><span>13 / 15</span></div>
+    <div class="right"><span>14 / 16</span></div>
   </div>
   <div class="kicker" data-anim>High-value B2B Keywords</div>
   <div class="h1-zh" data-anim style="margin-bottom:.4vh;font-size:clamp(26px,3.6vw,52px)">高价值关键词与出价区间</div>
@@ -990,11 +1065,11 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 14 — 指标预期 (light) ════════════════ -->
-<section class="slide light" data-theme="light" data-index="13" style="font-size:clamp(16px,1.3vw,22px)">
+<!-- ════════════════ SLIDE 15 — 指标预期 (light) ════════════════ -->
+<section class="slide light" data-theme="light" data-index="14" style="font-size:clamp(16px,1.3vw,22px)">
   <div class="chrome">
     <div class="left"><span>指标预期</span><span class="sep"></span><span>KPIs</span></div>
-    <div class="right"><span>14 / 15</span></div>
+    <div class="right"><span>15 / 16</span></div>
   </div>
   <div class="kicker" data-anim>Targets · 第一年核心交付</div>
   <div class="h1-zh" data-anim style="font-size:clamp(30px,4.2vw,62px);margin-bottom:1.6vh">第一年关键指标</div>
@@ -1028,8 +1103,8 @@ figure.tile{margin:0}
   </div>
 </section>
 
-<!-- ════════════════ SLIDE 15 — THANK YOU (hero dark) ════════════════ -->
-<section class="slide dark hero" data-theme="dark" data-index="14">
+<!-- ════════════════ SLIDE 16 — THANK YOU (hero dark) ════════════════ -->
+<section class="slide dark hero" data-theme="dark" data-index="15">
   <div class="ghost" style="left:-6vw;bottom:-14vh">SYHPCB</div>
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;z-index:2">
     <div class="kicker" data-anim style="margin-bottom:1.5vh">Summary</div>
@@ -1045,7 +1120,7 @@ figure.tile{margin:0}
   </div>
   <div class="chrome" style="position:relative;z-index:2">
     <div class="left"><span>结尾</span><span class="sep"></span><span>End</span></div>
-    <div class="right"><span>15 / 15</span></div>
+    <div class="right"><span>16 / 16</span></div>
   </div>
 </section>
 
@@ -1054,8 +1129,9 @@ figure.tile{margin:0}
 <!-- ═══ Navigation ═══ -->
 <div id="nav">
   <button id="prevBtn">←</button>
-  <span id="pageIndicator" style="font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.1vw,19px);opacity:.35;min-width:4ch;text-align:center">01/15</span>
+  <span id="pageIndicator" style="font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.1vw,19px);opacity:.35;min-width:4ch;text-align:center">01/16</span>
   <div class="dots" id="navDots"></div>
+  <button id="tocBtn" title="目录" style="font-family:'Noto Sans SC',sans-serif;font-size:clamp(12px,1vw,17px);background:none;border:1px solid rgba(var(--ink-rgb),.15);color:rgba(var(--ink-rgb),.5);padding:.3vh .8vw;border-radius:4px;cursor:pointer;transition:all .25s;white-space:nowrap">☰ 目录</button>
   <button id="nextBtn">→</button>
 </div>
 
@@ -1088,6 +1164,7 @@ if(typeof lucide!=='undefined') lucide.createIcons();
   const dots = document.getElementById('navDots');
   const prev = document.getElementById('prevBtn');
   const next = document.getElementById('nextBtn');
+  const tocBtn = document.getElementById('tocBtn');
   let cur = 0;
 
   for(let i=0;i<total;i++){
@@ -1105,9 +1182,20 @@ if(typeof lucide!=='undefined') lucide.createIcons();
     document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===i));
     cur=i;
     pageInd.textContent=String(i+1).padStart(2,'0')+'/'+String(total).padStart(2,'0');
+    // Update TOC button theme
+    const theme=slides[i].getAttribute('data-theme');
+    tocBtn.style.borderColor=theme==='dark'?'rgba(255,255,255,.2)':'rgba(var(--ink-rgb),.15)';
+    tocBtn.style.color=theme==='dark'?'rgba(255,255,255,.5)':'rgba(var(--ink-rgb),.5)';
   }
 
-  prev.addEventListener('click',()=>go(cur-1));
+    // ═══ TOC slide click handlers ═══
+  document.querySelectorAll('.toc-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+      const slideIdx = parseInt(item.getAttribute('data-slide'));
+      if(!isNaN(slideIdx)) go(slideIdx);
+    });
+  });
+prev.addEventListener('click',()=>go(cur-1));
   next.addEventListener('click',()=>go(cur+1));
 
   document.addEventListener('keydown',e=>{
@@ -1136,12 +1224,12 @@ if(typeof lucide!=='undefined') lucide.createIcons();
   const indexDiv=document.getElementById('index');
   const indexGrid=document.getElementById('indexGrid');
   const labels=[
-    '封面','核心结论','现状诊断','业务契合度','搜索路径',
+    '封面','目录','核心结论','现状诊断','业务契合度','搜索路径',
     '关键词漏斗','竞品对比','竞争格局','难度评估','执行路线图',
     '内容体系','Google Ads 概览','关键词出价','指标预期','总结'
   ];
   const enLabels=[
-    'Cover','Conclusions','Diagnosis','Business Fit','Search Journey',
+    'Cover','Contents','Conclusions','Diagnosis','Business Fit','Search Journey',
     'Keyword Funnel','Benchmark','Landscape','Difficulty','Roadmap',
     'Content','Market Overview','Bid Ranges','KPIs','Summary'
   ];
@@ -1153,7 +1241,14 @@ if(typeof lucide!=='undefined') lucide.createIcons();
     indexGrid.appendChild(item);
   });
 
-  // Toggle index with I key or Escape
+  // Init TOC button theme for initial slide
+  tocBtn.style.borderColor='rgba(255,255,255,.2)';
+  tocBtn.style.color='rgba(255,255,255,.5)';
+
+  // Toggle index with TOC button, I key, or Escape
+  tocBtn.addEventListener('click',()=>{
+    indexDiv.classList.toggle('show');
+  });
   document.addEventListener('keydown',e=>{
     if(e.key==='i'||e.key==='I'||e.key==='Escape'){
       if(e.key==='Escape') indexDiv.classList.remove('show');
@@ -1374,4 +1469,7 @@ void main(){
 </script>
 </body>
 </html>
+
+
+
 
