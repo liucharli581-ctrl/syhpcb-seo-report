@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYH LED · SEO & SEM 增长蓝图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ============ 主题色：深绿 · Deep Green ============
+       深墨绿背景 + 暖米白纸面，沉静而专业的绿 */
+    --ink:#0d1f14;
+    --ink-rgb:13,31,20;
+    --paper:#f7f0e8;
+    --paper-rgb:247,240,232;
+    --paper-tint:#ece2d6;
+    --ink-tint:#1a3322;
+
+    /* ============ 字体(跨主题固定) ============ */
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --serif-en:"Playfair Display","Source Serif 4",Georgia,serif;
+    --serif-body-en:"Source Serif 4",Georgia,serif;
+    --serif-zh:"Noto Serif SC",source-han-serif-sc,serif;
+    --sans-zh:"Noto Sans SC",source-han-sans-sc,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);color:var(--paper);font-family:var(--sans-zh);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+  /* ============ WebGL 双背景 ============ */
+  canvas.bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;transition:opacity 1.2s ease}
+  canvas#bg-light{opacity:0}
+  canvas#bg-dark{opacity:1}
+  body.light-bg canvas#bg-light{opacity:1}
+  body.light-bg canvas#bg-dark{opacity:0}
+
+  /* ============ Deck 容器 + 翻页 ============ */
+  #deck{position:fixed;inset:0;width:10000vw;height:100vh;display:flex;flex-wrap:nowrap;transition:transform .9s cubic-bezier(.77,0,.175,1);z-index:10;will-change:transform}
+  .slide{width:100vw;height:100vh;flex:0 0 100vw;position:relative;padding:6vh 6vw 10vh 6vw;display:flex;flex-direction:column;overflow:hidden}
+  .slide.light{color:var(--ink);background:var(--paper)}
+  .slide.dark{color:var(--paper);background:var(--ink)}
+
+  .slide::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;transition:background .7s ease}
+  .slide.light::before{background:rgba(var(--paper-rgb),.78);backdrop-filter:blur(3px)}
+  .slide.dark::before{background:rgba(var(--ink-rgb),.78);backdrop-filter:blur(3px)}
+  .slide.hero.light::before{background:rgba(var(--paper-rgb),.16);backdrop-filter:none}
+  .slide.hero.dark::before{background:rgba(var(--ink-rgb),.12);backdrop-filter:none}
+  .slide.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
+  .slide.hero.light::after{background:linear-gradient(180deg,rgba(var(--paper-rgb),.28) 0%,rgba(var(--paper-rgb),0) 14%,rgba(var(--paper-rgb),0) 86%,rgba(var(--paper-rgb),.28) 100%)}
+  .slide.hero.dark::after{background:linear-gradient(180deg,rgba(var(--ink-rgb),.32) 0%,rgba(var(--ink-rgb),0) 14%,rgba(var(--ink-rgb),0) 86%,rgba(var(--ink-rgb),.32) 100%)}
+
+  .chrome{display:flex;justify-content:space-between;align-items:flex-start;font-family:var(--mono);font-size:13px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
+  .chrome .left,.chrome .right{display:flex;gap:2.4em;align-items:center}
+  .chrome .sep{width:40px;height:1px;background:currentColor;opacity:.4}
+  .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.55}
+  .foot .title{font-family:var(--serif-zh);font-weight:400;letter-spacing:.05em;text-transform:none;opacity:.75;font-size:14px}
+
+  .tag{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;padding:6px 14px;border:1px solid currentColor;opacity:.85}
+  .rule{width:100%;height:1px;background:currentColor;opacity:.25;margin:3vh 0}
+  .rule.v{width:1px;height:100%;margin:0}
+
+  .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.3em;text-transform:uppercase;opacity:.6;margin-bottom:2.6vh}
+  .display{font-family:var(--serif-en);font-weight:700;font-size:11vw;line-height:.92;letter-spacing:-.025em}
+  .display-zh{font-family:var(--serif-zh);font-weight:700;font-size:7.8vw;line-height:1.04;letter-spacing:-.005em}
+  .h1-zh{font-family:var(--serif-zh);font-weight:700;font-size:4.6vw;line-height:1.12;letter-spacing:-.005em}
+  .h2-zh{font-family:var(--serif-zh);font-weight:600;font-size:3.2vw;line-height:1.2;letter-spacing:0}
+  .h3-zh{font-family:var(--serif-zh);font-weight:500;font-size:1.9vw;line-height:1.35}
+  .body-zh{font-family:var(--sans-zh);font-weight:400;font-size:max(16px,1.22vw);line-height:1.75;opacity:.82;letter-spacing:.01em}
+  .body-serif{font-family:var(--serif-zh);font-weight:400;font-size:max(16px,1.3vw);line-height:1.65;opacity:.88}
+  .lead{font-family:var(--serif-zh);font-weight:400;font-size:2vw;line-height:1.4;opacity:.85}
+  .meta{font-family:var(--mono);font-size:max(12px,.88vw);letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+  .big-num{font-family:var(--serif-en);font-weight:800;font-size:10vw;line-height:.85;letter-spacing:-.03em;font-feature-settings:"tnum"}
+  .mid-num{font-family:var(--serif-en);font-weight:700;font-size:5.5vw;line-height:.88;letter-spacing:-.02em;font-feature-settings:"tnum"}
+  .ghost{font-family:var(--serif-en);font-weight:900;font-size:34vw;line-height:.8;opacity:.06;letter-spacing:-.04em;position:absolute;font-feature-settings:"tnum"}
+  em{font-style:italic;font-family:var(--serif-en)}
+  .en{font-family:var(--serif-en);font-style:italic;font-weight:500}
+
+  .col{display:flex;flex-direction:column;gap:2.4vh}
+  .row{display:flex;align-items:center;gap:3vw}
+  .grid-6{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:4vw 6vw;flex:1;align-content:center;padding:2vh 0}
+  .grid-9{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3vh 4vw;flex:1;align-content:center}
+  .grid-4{display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);gap:4vh 6vw;flex:1;align-content:center}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:4vw;flex:1;align-content:center}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:4vw;flex:1;align-items:center}
+  .split-55{display:grid;grid-template-columns:55fr 45fr;gap:5vw;flex:1;align-items:stretch}
+  .fill{flex:1}
+  .center{align-items:center;justify-content:center;text-align:center}
+  .bottom-left{position:absolute;left:6vw;bottom:9vh;max-width:50vw}
+  .bottom-right{position:absolute;right:6vw;bottom:9vh;max-width:50vw;text-align:right}
+  .top-right{position:absolute;right:6vw;top:6vh;text-align:right}
+
+  .stat{display:flex;flex-direction:column;gap:1vh;align-items:flex-start}
+  .stat .n{font-family:var(--serif-en);font-weight:800;font-size:8vw;line-height:.88;letter-spacing:-.03em;font-feature-settings:"tnum"}
+  .stat .l{font-family:var(--sans-zh);font-size:max(14px,1.05vw);opacity:.7;margin-top:1vh;font-weight:400;line-height:1.5}
+  .stat .m{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:.5;margin-bottom:.2vh}
+
+  .callout{padding:3vh 2.4vw;border-left:3px solid currentColor;position:relative;font-family:var(--serif-zh);font-size:max(16px,1.2vw);line-height:1.55;opacity:.92}
+  .slide.light .callout{background:rgba(var(--ink-rgb),.05)}
+  .slide.dark .callout{background:rgba(var(--paper-rgb),.06)}
+  .callout .cite{display:block;margin-top:1.6vh;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.6}
+  .callout .q-big{font-family:var(--serif-zh);font-weight:600;font-size:max(18px,1.6vw);line-height:1.42}
+
+  .plat{display:flex;flex-direction:column;justify-content:flex-end;padding:2vh 0;border-top:1px solid currentColor;border-color:rgba(127,127,127,.35)}
+  .plat .name{font-family:var(--serif-zh);font-weight:700;font-size:1.8vw;margin-bottom:.6vh}
+  .plat .nb{font-family:var(--serif-en);font-weight:700;font-size:3.2vw;letter-spacing:-.02em;line-height:1;font-feature-settings:"tnum"}
+  .plat .sub{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.55;margin-top:.6vh}
+  .plat .fill{font-family:var(--sans-zh);font-weight:300;font-size:2.4vw;opacity:.28;letter-spacing:-.01em;line-height:1}
+
+  .rowline{display:grid;grid-template-columns:1fr 2fr 1fr;gap:2vw;padding:2.2vh 0;border-top:1px solid currentColor;align-items:center;border-color:rgba(127,127,127,.25)}
+  .rowline:last-child{border-bottom:1px solid currentColor;border-color:rgba(127,127,127,.25)}
+  .rowline .k{font-family:var(--serif-zh);font-weight:700;font-size:1.7vw}
+  .rowline .v{font-family:var(--sans-zh);font-weight:400;font-size:max(15px,1.2vw);opacity:.85;line-height:1.55}
+  .rowline .m{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.6;justify-self:end}
+
+  .pillar{display:flex;flex-direction:column;gap:1.8vh}
+  .pillar .ic{font-family:var(--serif-en);font-style:italic;font-size:2.6vw;opacity:.45;font-weight:400}
+  .pillar .ic svg{width:2.8vw;height:2.8vw;stroke-width:1.2;opacity:.7}
+  .pillar .t{font-family:var(--serif-zh);font-weight:700;font-size:2.4vw;line-height:1.1}
+  .pillar .d{font-family:var(--sans-zh);font-weight:400;font-size:max(15px,1.1vw);opacity:.76;line-height:1.6}
+
+  .sign{font-family:var(--serif-en);font-style:italic;font-weight:500;font-size:2vw;opacity:.7}
+  .hi{position:relative;display:inline}
+  .slide.dark .hi::after{content:"";position:absolute;left:-.1em;right:-.1em;bottom:-.05em;height:.28em;background:rgba(var(--paper-rgb),.15);z-index:-1}
+  .slide.light .hi::after{content:"";position:absolute;left:-.1em;right:-.1em;bottom:-.05em;height:.28em;background:rgba(var(--ink-rgb),.08);z-index:-1}
+
+  .ico{width:1em;height:1em;display:inline-block;vertical-align:-.12em;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .ico-lg,.ico-md,.ico-sm{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+  .ico-lg{width:2.6vw;height:2.6vw;stroke-width:1.2;display:inline-block}
+  .ico-md{width:1.8vw;height:1.8vw;stroke-width:1.3;display:inline-block;vertical-align:-.4em}
+  .ico-sm{width:1.2vw;height:1.2vw;stroke-width:1.4;display:inline-block;vertical-align:-.15em;opacity:.7}
+
+  .img-slot{border:1.5px dashed rgba(127,127,127,.4);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1vh;padding:2vh 2vw;font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;opacity:.55;position:relative;aspect-ratio:16/9;width:100%;max-height:56vh;margin-inline:auto;box-sizing:border-box}
+  .img-slot::before{content:"";position:absolute;inset:8px;border:1px solid currentColor;opacity:.2}
+  .img-slot .plus{font-size:2vw;font-weight:300;opacity:.5;letter-spacing:0}
+  .img-slot .label{position:relative;z-index:2;text-align:center}
+  .img-slot.r-4x3{aspect-ratio:4/3}
+  .img-slot.r-3x2{aspect-ratio:3/2}
+  .img-slot.r-1x1{aspect-ratio:1/1}
+
+  .frame-img{overflow:hidden;position:relative;background:rgba(0,0,0,.04);box-sizing:border-box;width:100%;border-radius:4px}
+  .slide.dark .frame-img{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
+  .frame-img > img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+  .frame-img.fit-contain > img{object-fit:contain;object-position:center center}
+  .frame-img.r-16x9{aspect-ratio:16/9;max-height:64vh}
+  .frame-img.r-16x10{aspect-ratio:16/10;max-height:56vh}
+  .frame-img.r-4x3{aspect-ratio:4/3;max-height:56vh}
+  .frame-img.r-3x2{aspect-ratio:3/2;max-height:46vh}
+  .frame-img.r-3x4{aspect-ratio:3/4;max-height:60vh}
+  .frame-img.r-1x1{aspect-ratio:1/1;max-height:50vh}
+  .frame-img.h-16{height:16vh}
+  .frame-img.h-18{height:18vh}
+  .frame-img.h-22{height:22vh}
+  .frame-img.h-26{height:26vh}
+  .frame-img.h-28{height:28vh}
+  .frame-cap{display:flex;justify-content:space-between;align-items:baseline;gap:1vw;margin-top:.8vh;font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:.72}
+  .frame-cap .pf{font-family:var(--serif-zh);font-weight:600;font-size:max(14px,1vw);letter-spacing:.04em;text-transform:none;opacity:.94}
+  .frame-cap .nb{font-family:var(--serif-en);font-style:italic;font-size:max(16px,1.2vw);letter-spacing:.02em;text-transform:none;opacity:.88}
+  .frame-cap .idx{font-family:var(--mono);opacity:.5}
+  figure.tile{display:flex;flex-direction:column;margin:0;min-width:0}
+  figure.tile > .frame-img{flex:0 0 auto}
+
+  #nav{position:fixed;left:50%;bottom:2.6vh;transform:translateX(-50%);z-index:30;display:flex;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  #nav .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:all .3s ease;border:0;padding:0}
+  #nav .dot:hover{background:rgba(255,255,255,.5);transform:scale(1.15)}
+  #nav .dot.active{background:rgba(255,255,255,.95);width:22px;border-radius:999px}
+  body.light-bg #nav{background:rgba(255,255,255,.25)}
+  body.light-bg #nav .dot{background:rgba(var(--ink-rgb),.25)}
+  body.light-bg #nav .dot.active{background:rgba(var(--ink-rgb),.9)}
+  #hint{position:fixed;bottom:3vh;right:3vw;z-index:30;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.4;mix-blend-mode:difference;color:#aaa}
+
+  .frame{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+  .frame.grid-2-7-5,
+  .frame.grid-2-6-6,
+  .frame.grid-2-8-4,
+  .frame.grid-3-3,
+  .frame.grid-6{display:grid}
+
+  .h-hero{
+    font-family:var(--serif-zh);
+    font-weight:900;
+    font-size:10vw;
+    line-height:.96;
+    letter-spacing:-.02em;
+  }
+  .h-xl{
+    font-family:var(--serif-zh);
+    font-weight:700;
+    font-size:6.2vw;
+    line-height:1.08;
+    letter-spacing:-.01em;
+  }
+  .h-sub{
+    font-family:var(--serif-zh);
+    font-weight:500;
+    font-size:3.1vw;
+    line-height:1.25;
+    letter-spacing:0;
+    opacity:.7;
+  }
+  .h-md{
+    font-family:var(--serif-zh);
+    font-weight:600;
+    font-size:2.3vw;
+    line-height:1.3;
+  }
+  .h-hero-en,.h-xl-en{font-family:var(--serif-en);letter-spacing:-.025em}
+
+  .lead{
+    font-family:var(--serif-zh);
+    font-weight:400;
+    font-size:1.75vw;
+    line-height:1.5;
+    opacity:.86;
+  }
+
+  .meta-row{
+    display:flex;
+    gap:1.2em;
+    align-items:baseline;
+    flex-wrap:wrap;
+    font-family:var(--mono);
+    font-size:max(13px,.92vw);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+
+  .stat-card{
+    display:flex;
+    flex-direction:column;
+    gap:.8vh;
+    align-items:flex-start;
+    padding-top:1.6vh;
+    border-top:1px solid currentColor;
+    border-color:rgba(127,127,127,.3);
+  }
+  .stat-card .stat-label{
+    font-family:var(--mono);
+    font-size:max(11px,.78vw);
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    opacity:.55;
+  }
+  .stat-card .stat-nb{
+    font-family:var(--serif-en);
+    font-weight:800;
+    font-size:5.8vw;
+    line-height:.9;
+    letter-spacing:-.03em;
+    font-feature-settings:"tnum";
+    margin-top:.4vh;
+  }
+  .stat-card .stat-nb .stat-unit{
+    font-family:var(--serif-zh);
+    font-weight:500;
+    font-size:.38em;
+    letter-spacing:0;
+    opacity:.72;
+    margin-left:.14em;
+  }
+  .stat-card .stat-note{
+    font-family:var(--sans-zh);
+    font-weight:400;
+    font-size:max(14px,1.05vw);
+    line-height:1.5;
+    opacity:.72;
+    margin-top:.6vh;
+  }
+  .grid-4 .stat-card .stat-nb{font-size:5vw}
+  .grid-3 .stat-card .stat-nb{font-size:6.8vw}
+
+  .pipeline-section{
+    margin-top:4.4vh;
+    padding-top:2.8vh;
+    border-top:1px dashed rgba(127,127,127,.32);
+  }
+  .pipeline-section:first-of-type{
+    border-top:0;
+    padding-top:0;
+    margin-top:3vh;
+  }
+  .pipeline-label{
+    font-family:var(--mono);
+    font-size:max(12px,.85vw);
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    opacity:.62;
+    margin-bottom:2.2vh;
+  }
+  .pipeline{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:1.2vw;
+  }
+  .pipeline[data-cols="3"]{grid-template-columns:repeat(3,1fr)}
+  .pipeline[data-cols="4"]{grid-template-columns:repeat(4,1fr)}
+  .pipeline[data-cols="6"]{grid-template-columns:repeat(6,1fr)}
+  .step{
+    display:flex;
+    flex-direction:column;
+    gap:.8vh;
+    padding-top:1.4vh;
+    border-top:1px solid currentColor;
+    border-color:rgba(127,127,127,.35);
+  }
+  .step-nb{
+    font-family:var(--serif-en);
+    font-style:italic;
+    font-weight:500;
+    font-size:1.15vw;
+    opacity:.45;
+  }
+  .step-title{
+    font-family:var(--sans-zh);
+    font-weight:700;
+    font-size:1.55vw;
+    letter-spacing:.01em;
+    line-height:1.2;
+  }
+  .step-desc{
+    font-family:var(--sans-zh);
+    font-weight:400;
+    font-size:max(13px,.95vw);
+    line-height:1.45;
+    opacity:.72;
+  }
+
+  .grid-2-7-5{display:grid;grid-template-columns:7fr 5fr;gap:3vw 4vh;align-items:start}
+  .grid-2-6-6{display:grid;grid-template-columns:1fr 1fr;gap:3vw 4vh;align-items:start}
+  .grid-2-8-4{display:grid;grid-template-columns:8fr 4fr;gap:3vw 4vh;align-items:start}
+  .grid-3-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    grid-auto-rows:minmax(0,1fr);
+    gap:2.4vh 2vw;
+  }
+  figure.frame-img{margin:0;display:flex;flex-direction:column;min-width:0}
+  .img-cap{
+    display:block;
+    margin-top:.8vh;
+    font-family:var(--mono);
+    font-size:max(11px,.8vw);
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+  .callout-src{
+    display:block;
+    margin-top:1.6vh;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+  .chrome{font-family:var(--mono);font-size:max(12px,.78vw);letter-spacing:.2em;text-transform:uppercase;opacity:.62}
+  .foot{font-family:var(--mono);font-size:max(12px,.78vw);letter-spacing:.18em;text-transform:uppercase;opacity:.5}
+
+  [data-anim]{opacity:1}
+  body.motion-ready [data-anim]{opacity:0}
+  body.motion-ready [data-anim="left"]{transform:translateX(-24px)}
+  body.motion-ready [data-anim="right"]{transform:translateX(24px)}
+  body.motion-ready [data-anim="line"]{opacity:0;transform:translateY(10px)}
+  body.motion-ready [data-animate="pipeline"] [data-anim]{opacity:.15}
+
+  /* ============ 自定义组件 ============ */
+  .gauge-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}
+  .gauge-value{position:absolute;font-family:var(--serif-en);font-weight:800;font-size:5vw;letter-spacing:-.03em;color:var(--ink)}
+  .slide.dark .gauge-value{color:var(--paper)}
+  .difficulty-bar{display:flex;gap:0;width:100%;margin-top:1vh}
+  .difficulty-bar .seg{flex:1;height:6px;background:rgba(127,127,127,.2);border-radius:0}
+  .difficulty-bar .seg:first-child{border-radius:3px 0 0 3px}
+  .difficulty-bar .seg:last-child{border-radius:0 3px 3px 0}
+  .difficulty-bar .seg.filled{background:#2d8a4e}
+  .slide.dark .difficulty-bar .seg.filled{background:#3d9e55}
+
+  .btn-group{display:flex;flex-wrap:wrap;gap:1vw;margin-top:2vh}
+  .data-btn{font-family:var(--mono);font-size:12px;letter-spacing:.12em;padding:10px 20px;border:1.5px solid rgba(var(--ink-rgb),.3);background:transparent;cursor:pointer;border-radius:4px;transition:all .2s;color:var(--ink)}
+  .slide.dark .data-btn{color:var(--paper);border-color:rgba(var(--paper-rgb),.3)}
+  .data-btn:hover,.data-btn.active{background:rgba(var(--ink-rgb),.08);border-color:rgba(var(--ink-rgb),.6)}
+  .slide.dark .data-btn:hover,.slide.dark .data-btn.active{background:rgba(var(--paper-rgb),.1);border-color:rgba(var(--paper-rgb),.6)}
+  .data-panel{display:none;margin-top:2vh;padding:2vh 2vw;background:rgba(var(--ink-rgb),.04);border-radius:4px;border:1px solid rgba(var(--ink-rgb),.1);max-height:30vh;overflow-y:auto;font-size:max(13px,.95vw);line-height:1.6}
+  .slide.dark .data-panel{background:rgba(var(--paper-rgb),.05);border-color:rgba(var(--paper-rgb),.1)}
+  .data-panel.show{display:block}
+  .data-table{width:100%;border-collapse:collapse;font-family:var(--sans-zh);font-size:max(13px,.9vw)}
+  .data-table th{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;opacity:.6;text-align:left;padding:8px 10px;border-bottom:1px solid rgba(127,127,127,.2)}
+  .data-table td{padding:8px 10px;border-bottom:1px solid rgba(127,127,127,.1)}
+
+  .kpi-table{width:100%;border-collapse:collapse;font-family:var(--sans-zh);font-size:max(14px,1vw)}
+  .kpi-table th{font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;opacity:.6;text-align:left;padding:10px 12px;border-bottom:2px solid rgba(127,127,127,.3)}
+  .kpi-table td{padding:10px 12px;border-bottom:1px solid rgba(127,127,127,.15);font-weight:400}
+  .kpi-table .label-cell{font-family:var(--serif-zh);font-weight:600}
+  .kpi-table .num{font-family:var(--serif-en);font-weight:700;font-feature-settings:"tnum"}
+
+  .tag-red{display:inline-block;background:rgba(45,138,78,.12);color:var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.12em;padding:3px 10px;border-radius:3px}
+  .slide.dark .tag-red{background:rgba(61,158,85,.2);color:var(--paper)}
+
+  .cluster-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6vh 2vw;margin-top:2vh}
+  .cluster-item{display:flex;justify-content:space-between;align-items:center;padding:1.2vh 1.2vw;border-bottom:1px solid rgba(127,127,127,.15)}
+  .cluster-item .name{font-family:var(--serif-zh);font-weight:600;font-size:max(14px,1.05vw)}
+  .cluster-item .val{font-family:var(--serif-en);font-weight:700;font-size:max(16px,1.3vw);font-feature-settings:"tnum"}
+
+  .roadmap-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1.5vw;margin-top:2vh;flex:1}
+  .roadmap-phase{padding:2vh 1.5vw;border-top:3px solid;display:flex;flex-direction:column;gap:1.2vh}
+  .roadmap-phase .phase-title{font-family:var(--serif-zh);font-weight:700;font-size:max(16px,1.3vw)}
+  .roadmap-phase .phase-time{font-family:var(--mono);font-size:12px;letter-spacing:.15em;opacity:.6;text-transform:uppercase}
+  .roadmap-phase .phase-items{font-family:var(--sans-zh);font-size:max(13px,.95vw);opacity:.78;line-height:1.65;padding-left:1em}
+
+  .accent-red{color:#2d8a4e}
+  .slide.dark .accent-red{color:#3d9e55}
+
+  @media (max-width:900px){
+    .display{font-size:16vw}
+    .display-zh{font-size:12vw}
+    .h1-zh{font-size:7vw}
+    .h-hero{font-size:14vw}
+    .h-xl{font-size:9vw}
+    .pipeline{grid-template-columns:repeat(2,1fr)}
+    .grid-2-7-5,.grid-2-6-6,.grid-2-8-4{grid-template-columns:1fr}
+    .cluster-grid{grid-template-columns:1fr}
+    .roadmap-grid{grid-template-columns:1fr 1fr}
+  }
+
+  /* 内容滚动区 */
+  .scroll-content{overflow-y:auto;flex:1;padding-right:1vw;margin-top:1vh}
+  .scroll-content::-webkit-scrollbar{width:4px}
+  .scroll-content::-webkit-scrollbar-thumb{background:rgba(127,127,127,.3);border-radius:2px}
+</style>
+</head>
+<body>
+
+<canvas id="bg-dark" class="bg"></canvas>
+<canvas id="bg-light" class="bg"></canvas>
+<div id="hint">← → 翻页 · ESC 索引</div>
+
+<div id="deck">
+
+<!-- ================================================================ -->
+<!-- PAGE 1 · 封面 -->
+<section class="slide hero dark">
+  <div class="chrome">
+    <div>SYH LED · 2026–2027</div>
+    <div>Vol.01</div>
+  </div>
+  <div class="frame" style="display:grid; gap:4vh; align-content:center; min-height:80vh">
+    <div class="kicker" data-anim>SEO & SEM 增长蓝图</div>
+    <h1 class="h-hero" data-anim style="font-size:8.5vw; line-height:1.02">
+      SYH LED<br>
+      <span style="font-size:6.2vw; opacity:.78; display:block; margin-top:1vh">搜索增长战略</span>
+    </h1>
+    <p class="lead" style="max-width:55vw" data-anim>
+      B2B 照明制造商 · 从冷启动到持续获客 · 未来 12 个月 SEO & SEM 完整路线图
+    </p>
+    <div class="meta-row" data-anim>
+      <span>SYH LEDRAY · syhledray.com</span><span>·</span><span>2026.07</span>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYH LED · SEO & SEM Blueprint</div>
+    <div>— 2026 —</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 2 · 目录 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>目录 · Contents</div>
+    <div>02 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh; justify-content:center">
+    <div class="kicker" data-anim>Table of Contents</div>
+    <h2 class="h-xl" data-anim style="margin-bottom:1vh">报告目录</h2>
+    <p class="lead" style="max-width:50vw; margin-bottom:2.5vh" data-anim>四大部分 · 18 页全景呈现 SYH LED 搜索增长战略</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2.4vh 3.5vw; max-width:75vw; margin:0 auto; flex:1; align-content:center" data-anim>
+      <div class="rowline" style="border:none; grid-template-columns:auto 1fr; gap:0.8vw; padding:1.4vh 0">
+        <div class="m" style="opacity:.5; font-size:20px; font-family:var(--serif-en); font-style:italic">01</div>
+        <div><div class="k" style="font-size:1.5vw">诊断 · 难度与基线</div><div class="v" style="font-size:max(12px,.85vw); opacity:.6">SEO 难度 · 现状基线 · 业务契合</div></div>
+      </div>
+      <div class="rowline" style="border:none; grid-template-columns:auto 1fr; gap:0.8vw; padding:1.4vh 0">
+        <div class="m" style="opacity:.5; font-size:20px; font-family:var(--serif-en); font-style:italic">02</div>
+        <div><div class="k" style="font-size:1.5vw">客户旅程 · B2B 采购路径</div><div class="v" style="font-size:max(12px,.85vw); opacity:.6">买家搜索行为 · 触达策略</div></div>
+      </div>
+      <div class="rowline" style="border:none; grid-template-columns:auto 1fr; gap:0.8vw; padding:1.4vh 0">
+        <div class="m" style="opacity:.5; font-size:20px; font-family:var(--serif-en); font-style:italic">03</div>
+        <div><div class="k" style="font-size:1.5vw">竞争格局 · 竞品矩阵</div><div class="v" style="font-size:max(12px,.85vw); opacity:.6">竞争对手全景 · 关键词集群</div></div>
+      </div>
+      <div class="rowline" style="border:none; grid-template-columns:auto 1fr; gap:0.8vw; padding:1.4vh 0">
+        <div class="m" style="opacity:.5; font-size:20px; font-family:var(--serif-en); font-style:italic">04</div>
+        <div><div class="k" style="font-size:1.5vw">关键词战略 · B2B 词库</div><div class="v" style="font-size:max(12px,.85vw); opacity:.6">核心 B2B 词 · Google Ads 数据</div></div>
+      </div>
+      <div class="rowline" style="border:none; grid-template-columns:auto 1fr; gap:0.8vw; padding:1.4vh 0">
+        <div class="m" style="opacity:.5; font-size:20px; font-family:var(--serif-en); font-style:italic">05</div>
+        <div><div class="k" style="font-size:1.5vw">SEM 广告策略</div><div class="v" style="font-size:max(12px,.85vw); opacity:.6">Google Ads 测试 · 否词策略</div></div>
+      </div>
+      <div class="rowline" style="border:none; grid-template-columns:auto 1fr; gap:0.8vw; padding:1.4vh 0">
+        <div class="m" style="opacity:.5; font-size:20px; font-family:var(--serif-en); font-style:italic">06</div>
+        <div><div class="k" style="font-size:1.5vw">内容战略 · 日历与优先级</div><div class="v" style="font-size:max(12px,.85vw); opacity:.6">内容选题 · 优先级矩阵</div></div>
+      </div>
+      <div class="rowline" style="border:none; grid-template-columns:auto 1fr; gap:0.8vw; padding:1.4vh 0">
+        <div class="m" style="opacity:.5; font-size:20px; font-family:var(--serif-en); font-style:italic">07</div>
+        <div><div class="k" style="font-size:1.5vw">KPI 目标 · 12 个月指标</div><div class="v" style="font-size:max(12px,.85vw); opacity:.6">核心指标 · 增长模型</div></div>
+      </div>
+      <div class="rowline" style="border:none; grid-template-columns:auto 1fr; gap:0.8vw; padding:1.4vh 0">
+        <div class="m" style="opacity:.5; font-size:20px; font-family:var(--serif-en); font-style:italic">08</div>
+        <div><div class="k" style="font-size:1.5vw">执行路线图 · 持续优化</div><div class="v" style="font-size:max(12px,.85vw); opacity:.6">执行指南 · 阶段路线 · 数据面板</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYH LED · SEO & SEM 增长蓝图</div>
+    <div>Contents</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 3 · SEO 综合难度评估 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>诊断 · Diagnosis</div>
+    <div>03 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:4vh">
+    <div class="kicker" data-anim>SEO Difficulty · 难度评估</div>
+    <h2 class="h-xl" data-anim>竞争烈度：<span class="accent-red">高</span></h2>
+    <p class="lead" style="max-width:65vw; margin-bottom:2vh" data-anim>
+      LED 照明 B2B 赛道竞争激烈，但中国制造商仍有结构性机会。
+    </p>
+    <div class="split" style="flex:1; align-items:start; margin-top:1vh" data-anim>
+      <!-- 左：难度指标 -->
+      <div style="display:flex; flex-direction:column; gap:2.4vh">
+        <div class="stat-card" data-anim>
+          <div class="stat-label">Overall SEO Difficulty</div>
+          <div class="stat-nb">8.0 <span class="stat-unit">/ 10</span></div>
+          <div class="stat-note">高竞争 · 需差异化内容 + 精准长尾策略</div>
+        </div>
+        <div class="stat-card" data-anim>
+          <div class="stat-label">SEM 竞价难度</div>
+          <div class="stat-nb">7.5 <span class="stat-unit">/ 10</span></div>
+          <div class="stat-note">CPC 偏高 · 建议精准匹配 + 否词优化</div>
+        </div>
+        <div class="rowline" style="border:none; padding:1vh 0; grid-template-columns:1.6fr 1fr" data-anim>
+          <div class="k" style="font-size:1.3vw">KD ≥ 60 高难词</div>
+          <div class="v" style="justify-self:end; font-size:1.3vw">~15%</div>
+        </div>
+        <div class="rowline" style="border:none; padding:1vh 0; grid-template-columns:1.6fr 1fr" data-anim>
+          <div class="k" style="font-size:1.3vw">KD 30–60 中难词</div>
+          <div class="v" style="justify-self:end; font-size:1.3vw">~35%</div>
+        </div>
+        <div class="rowline" style="border:none; padding:1vh 0; grid-template-columns:1.6fr 1fr" data-anim>
+          <div class="k" style="font-size:1.3vw">KD &lt; 30 低难词</div>
+          <div class="v" style="justify-self:end; font-size:1.3vw">~50%</div>
+        </div>
+      </div>
+      <!-- 右：判断 -->
+      <div style="display:flex; flex-direction:column; gap:2vh">
+        <div class="callout" data-anim>
+          <div class="q-big">核心判断</div>
+          <p style="margin-top:1.4vh; font-family:var(--sans-zh); font-size:max(15px,1.1vw); line-height:1.7; opacity:.85">
+            SYH LED 不应优先抢泛词 "led lights"（KD 23, 月搜索量 5,400），<br>
+            而应围绕 <span class="accent-red" style="font-weight:600">B2B 采购意图</span> 做 SEO：<br><br>
+            <strong>manufacturer / supplier / factory / commercial / industrial / outdoor</strong><br><br>
+            第一阶段以 <strong>XHLUX</strong> 为低权重可追目标，<br>
+            用 <strong>GRNLED</strong> 参考页面结构，<br>
+            以 <strong>Vorlane</strong> 和 <strong>ZGSM</strong> 为长期核心对标。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>Keyword Planner + SEMrush 数据 · 2026.07</div>
+    <div>Act I · Difficulty</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 3 · 现状诊断 -->
+<section class="slide dark">
+  <div class="chrome">
+    <div>诊断 · Current Baseline</div>
+    <div>04 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:4vh">
+    <div class="kicker" data-anim>现状 · Current State</div>
+    <h2 class="h-xl" data-anim>从 0 到 1</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:1vh" data-anim>
+      SYH LED 当前 Authority Score 仅 2，自然关键词几乎为零，属于真正的冷启动阶段。
+    </p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3vw; flex:1; align-content:center; margin-top:1vh">
+      <!-- 左：现状 -->
+      <div>
+        <div class="grid-4" style="gap:3vh 3vw; padding:0">
+          <div class="stat-card" data-anim>
+            <div class="stat-label">Organic Keywords</div>
+            <div class="stat-nb" style="font-size:4.2vw">~0</div>
+            <div class="stat-note">尚未出词 · 从零起步</div>
+          </div>
+          <div class="stat-card" data-anim>
+            <div class="stat-label">Top 2 Pages Keywords</div>
+            <div class="stat-nb" style="font-size:4.2vw">0</div>
+            <div class="stat-note">前 2 页排名关键词</div>
+          </div>
+          <div class="stat-card" data-anim>
+            <div class="stat-label">Referring Domains</div>
+            <div class="stat-nb" style="font-size:4.2vw">1</div>
+            <div class="stat-note">外链来源域名 · 极少</div>
+          </div>
+          <div class="stat-card" data-anim>
+            <div class="stat-label">Blog Posts</div>
+            <div class="stat-nb" style="font-size:4.2vw">~0</div>
+            <div class="stat-note">博客 / 内容文章</div>
+          </div>
+        </div>
+      </div>
+      <!-- 右：问题 -->
+      <div style="display:flex; flex-direction:column; gap:1.8vh; justify-content:center">
+        <div class="callout" data-anim>
+          <div class="q-big">关键缺口</div>
+          <div class="cite" style="margin-top:1.4vh; text-transform:none; font-family:var(--sans-zh); font-size:max(14px,1.05vw); letter-spacing:0; opacity:.85; line-height:1.7">
+            • SEMrush Authority Score 仅 2，域名权重极低<br>
+            • 自然搜索关键词不可用，尚未被 Google 赋予排名<br>
+            • 站点内容稀缺，无法支撑搜索引擎理解业务主题<br>
+            • 缺少 B2B 产品分类页和应用场景页<br>
+            • 博客/内容为零，无法覆盖长尾采购词<br>
+            • 外链极少，需从零建设<br>
+            • 品牌搜索量为 0，品牌认知度需从零建立
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYH LED · 当前站点状态评估</div>
+    <div>Act I · Baseline</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 4 · 竞争对手全景 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>竞争 · Competitors</div>
+    <div>05 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:4vh">
+    <div class="kicker" data-anim>Landscape · 全景</div>
+    <h2 class="h-xl" data-anim>竞争对手矩阵</h2>
+    <p class="lead" style="max-width:55vw; margin-bottom:2vh" data-anim>核心竞品分三层：直接对标、页面参考、低权重可追机会。</p>
+    <div class="scroll-content" data-anim>
+      <table class="kpi-table" style="width:100%">
+        <thead>
+          <tr>
+            <th>竞品</th>
+            <th>定位</th>
+            <th>DR</th>
+            <th>Org. Keywords</th>
+            <th>参考价值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">Vorlane</td>
+            <td>LED 制造商 · 高端定位</td>
+            <td class="num">52</td>
+            <td class="num">~3,200</td>
+            <td><span class="tag-red">核心对标</span> 内容 + 结构</td>
+          </tr>
+          <tr>
+            <td class="label-cell">ZGSM</td>
+            <td>工业/户外照明中国工厂</td>
+            <td class="num">48</td>
+            <td class="num">~2,800</td>
+            <td><span class="tag-red">核心对标</span> 工程照明 SEO</td>
+          </tr>
+          <tr>
+            <td class="label-cell">GRNLED</td>
+            <td>中国 LED 制造商</td>
+            <td class="num">35</td>
+            <td class="num">~1,900</td>
+            <td><span class="tag-red">页面参考</span> OEM/分类页结构</td>
+          </tr>
+          <tr>
+            <td class="label-cell">XHLUX</td>
+            <td>低权重长尾玩家</td>
+            <td class="num">22</td>
+            <td class="num">~1,200</td>
+            <td><span class="tag-red">可追目标</span> 冷启动参考</td>
+          </tr>
+          <tr>
+            <td class="label-cell">LSI Corp</td>
+            <td>美国商业照明品牌</td>
+            <td class="num">68</td>
+            <td class="num">~5,100</td>
+            <td>场景页参考</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Lithonia</td>
+            <td>美国照明巨头</td>
+            <td class="num">82</td>
+            <td class="num">~18,000</td>
+            <td>品牌词结构参考</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Dialight</td>
+            <td>工业/危险环境照明</td>
+            <td class="num">56</td>
+            <td class="num">~3,800</td>
+            <td>工业照明词参考</td>
+          </tr>
+          <tr>
+            <td class="label-cell">US LED</td>
+            <td>美国 LED 供应商</td>
+            <td class="num">44</td>
+            <td class="num">~2,100</td>
+            <td>应用页参考</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="foot">
+    <div>数据来源：SEMrush · 2026.07</div>
+    <div>Act I · Competitors</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 7 · 业务契合度 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>诊断 · Business Fit</div>
+    <div>06 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh">
+    <div class="kicker" data-anim>Business Fit · 业务契合度</div>
+    <h2 class="h-xl" data-anim>SYH LED 竞争优势</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:1.5vh" data-anim>三大核心能力支撑 B2B SEO 内容战略</p>
+    <div class="grid-3" style="flex:1; align-content:center; gap:2.5vw" data-anim>
+      <div class="callout" style="border-left-color:#2d8a4e; display:flex; flex-direction:column; gap:1.4vh">
+        <div style="font-family:var(--serif-en); font-style:italic; font-size:2.2vw; opacity:.4; font-weight:700">01</div>
+        <div class="h3-zh" style="font-weight:700">技术实力</div>
+        <div style="font-family:var(--sans-zh); font-size:max(14px,1.05vw); line-height:1.7; opacity:.78">
+          <strong>17+ 年</strong> LED 制造经验<br>
+          ISO9001 / CE / RoHS / UL 认证<br>
+          自研 SMD 封装技术<br>
+          月产能 <strong>500,000+</strong> 件
+        </div>
+      </div>
+      <div class="callout" style="border-left-color:#2d8a4e; display:flex; flex-direction:column; gap:1.4vh">
+        <div style="font-family:var(--serif-en); font-style:italic; font-size:2.2vw; opacity:.4; font-weight:700">02</div>
+        <div class="h3-zh" style="font-weight:700">产品矩阵</div>
+        <div style="font-family:var(--sans-zh); font-size:max(14px,1.05vw); line-height:1.7; opacity:.78">
+          覆盖 <strong>14 大产品线</strong><br>
+          商照 / 工业 / 户外 / 线性<br>
+          OEM/ODM 定制能力<br>
+          支持规格书 + IES 文件
+        </div>
+      </div>
+      <div class="callout" style="border-left-color:#2d8a4e; display:flex; flex-direction:column; gap:1.4vh">
+        <div style="font-family:var(--serif-en); font-style:italic; font-size:2.2vw; opacity:.4; font-weight:700">03</div>
+        <div class="h3-zh" style="font-weight:700">B2B 服务</div>
+        <div style="font-family:var(--sans-zh); font-size:max(14px,1.05vw); line-height:1.7; opacity:.78">
+          样品 < 7 天 · 交期 15–30 天<br>
+          质检流程 19 道工序<br>
+          MOQ 灵活 · 包装定制<br>
+          全球物流支持
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:1.5vh; font-size:max(13px,.95vw); text-align:center" data-anim>
+      <span style="opacity:.75">这些能力是 SEO 内容的核心素材 —— 每个优势都可以转化为一篇 B2B 采购指南</span>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYH LED 核心竞争力 · 内容战略基础</div>
+    <div>Act I · Business Fit</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 8 · B2B 客户旅程 -->
+<section class="slide dark">
+  <div class="chrome">
+    <div>旅程 · Customer Journey</div>
+    <div>07 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh">
+    <div class="kicker" data-anim>B2B Customer Journey</div>
+    <h2 class="h-xl" data-anim>B2B 采购搜索旅程</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:2vh" data-anim>从意识到成交，每一步都有对应的搜索行为和内容策略</p>
+    <div class="pipeline" data-cols="5" style="flex:1; align-content:center; gap:1.2vw" data-anim>
+      <div class="step">
+        <div class="step-nb">01</div>
+        <div class="step-title">意识阶段</div>
+        <div class="step-desc">买家搜索行业趋势、产品类型、技术参数。搜索"commercial led lighting"、"high bay lights"</div>
+        <div class="step-desc" style="opacity:.55; font-size:max(12px,.8vw); margin-top:0.5vh"><span style="font-family:var(--mono)">→</span> 内容策略：Buying Guide · 技术科普</div>
+      </div>
+      <div class="step">
+        <div class="step-nb">02</div>
+        <div class="step-title">考虑阶段</div>
+        <div class="step-desc">对比制造商、供应商资质。搜索"led light manufacturer china"、"led lighting factory"</div>
+        <div class="step-desc" style="opacity:.55; font-size:max(12px,.8vw); margin-top:0.5vh"><span style="font-family:var(--mono)">→</span> 内容策略：Manufacturer Guide · OEM 页</div>
+      </div>
+      <div class="step">
+        <div class="step-nb">03</div>
+        <div class="step-title">评估阶段</div>
+        <div class="step-desc">查看产品规格、认证、案例。搜索"led high bay specification"、"iso certified led manufacturer"</div>
+        <div class="step-desc" style="opacity:.55; font-size:max(12px,.8vw); margin-top:0.5vh"><span style="font-family:var(--mono)">→</span> 内容策略：产品页 · 认证页 · Case Study</div>
+      </div>
+      <div class="step">
+        <div class="step-nb">04</div>
+        <div class="step-title">决策阶段</div>
+        <div class="step-desc">对比 MOQ、交期、价格。搜索"led lighting supplier moq"、"sample lead time china"</div>
+        <div class="step-desc" style="opacity:.55; font-size:max(12px,.8vw); margin-top:0.5vh"><span style="font-family:var(--mono)">→</span> 内容策略：FAQ · 对比页 · Get Quote CTA</div>
+      </div>
+      <div class="step">
+        <div class="step-nb">05</div>
+        <div class="step-title">售后阶段</div>
+        <div class="step-desc">安装指导、质保查询、复购评估。搜索"led installation guide"、"warranty"</div>
+        <div class="step-desc" style="opacity:.55; font-size:max(12px,.8vw); margin-top:0.5vh"><span style="font-family:var(--mono)">→</span> 内容策略：安装指南 · 质保说明</div>
+      </div>
+    </div>
+    <div class="rule" style="margin:1.5vh 0" data-anim></div>
+    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:1.2vw" data-anim>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.5vw; color:#3d9e55">4,400</div>
+        <div class="meta" style="font-size:10px; text-transform:none">manufacturer 词<br>月搜索量</div>
+      </div>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.5vw; color:#3d9e55">2,900</div>
+        <div class="meta" style="font-size:10px; text-transform:none">lighting solutions<br>月搜索量</div>
+      </div>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.5vw; color:#3d9e55">1,600</div>
+        <div class="meta" style="font-size:10px; text-transform:none">supplier 词<br>月搜索量</div>
+      </div>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.5vw; color:#3d9e55">47</div>
+        <div class="meta" style="font-size:10px; text-transform:none">B2B 关键词<br>总量</div>
+      </div>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.5vw; color:#3d9e55">18.7K</div>
+        <div class="meta" style="font-size:10px; text-transform:none">月搜索总量<br>B2B 词库</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>Google Ads Keyword Planner · 47 B2B 关键词 | 月搜索总量 18,700</div>
+    <div>Act II · Journey</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 6 · 关键词集群地图 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>第二幕 · 关键词集群</div>
+    <div>08 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh">
+    <div class="kicker" data-anim>Keyword Cluster · 集群</div>
+    <h2 class="h-xl" data-anim>14 大产品关键词集群</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:0.5vh" data-anim>覆盖 B2B 采购全链路：制造商词 → 产品词 → 场景词</p>
+    <div class="scroll-content" data-anim>
+      <div class="cluster-grid">
+        <div class="cluster-item"><span class="name">LED Manufacturer / Supplier</span><span class="val" style="color:#2d8a4e">1,119</span></div>
+        <div class="cluster-item"><span class="name">General LED Lighting</span><span class="val">661</span></div>
+        <div class="cluster-item"><span class="name">LED Outdoor Lighting</span><span class="val" style="color:#2d8a4e">486</span></div>
+        <div class="cluster-item"><span class="name">LED Flood / Parking Lot</span><span class="val">375</span></div>
+        <div class="cluster-item"><span class="name">LED High Bay Lights</span><span class="val" style="color:#2d8a4e">136</span></div>
+        <div class="cluster-item"><span class="name">LED Street Lights</span><span class="val">130</span></div>
+        <div class="cluster-item"><span class="name">LED Commercial Lighting</span><span class="val">114</span></div>
+        <div class="cluster-item"><span class="name">LED Canopy Lights</span><span class="val">62</span></div>
+        <div class="cluster-item"><span class="name">LED Downlights / Ceiling</span><span class="val">160</span></div>
+        <div class="cluster-item"><span class="name">LED Tube Lights</span><span class="val">62</span></div>
+        <div class="cluster-item"><span class="name">LED Industrial Lighting</span><span class="val">49</span></div>
+        <div class="cluster-item"><span class="name">LED Track Lights</span><span class="val">27</span></div>
+        <div class="cluster-item"><span class="name">LED Linear Lights</span><span class="val">24</span></div>
+        <div class="cluster-item"><span class="name">LED Panel / Troffer</span><span class="val">23</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>关键词优先级：P1 核心 1,458 · P2 产品 1,214 · P3 内容 810</div>
+    <div>Act II · Clusters</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 7 · 核心 B2B 关键词表 -->
+<section class="slide dark">
+  <div class="chrome">
+    <div>第二幕 · 核心关键词</div>
+    <div>09 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh">
+    <div class="kicker" data-anim>Top B2B Keywords</div>
+    <h2 class="h-xl" data-anim>高价值 B2B 关键词</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:0.5vh" data-anim>KD ≤ 40 的低中难度词是冷启动阶段的主攻方向。</p>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1vw; margin-bottom:1.5vh; padding:1.2vh 1vw; background:rgba(61,158,85,.1); border-radius:6px" data-anim>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.2vw; color:#3d9e55">47</div>
+        <div class="meta" style="font-size:9px; text-transform:none; opacity:.6">B2B 关键词总数</div>
+      </div>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.2vw; color:#3d9e55">18,700</div>
+        <div class="meta" style="font-size:9px; text-transform:none; opacity:.6">月搜索总量</div>
+      </div>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.2vw; color:#3d9e55">¥0.16</div>
+        <div class="meta" style="font-size:9px; text-transform:none; opacity:.6">最低建议出价</div>
+      </div>
+      <div style="text-align:center">
+        <div class="mid-num" style="font-size:2.2vw; color:#3d9e55">¥294</div>
+        <div class="meta" style="font-size:9px; text-transform:none; opacity:.6">最高建议出价</div>
+      </div>
+    </div>
+    <div class="scroll-content" data-anim>
+      <table class="kpi-table" style="width:100%">
+        <thead>
+          <tr><th>关键词</th><th>月搜索量</th><th>KD</th><th>落地页</th><th>优先级</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="label-cell">commercial led lighting</td><td class="num">2,900</td><td class="num">34</td><td>/commercial-lighting</td><td><span class="tag-red">P1</span></td></tr>
+          <tr><td class="label-cell">industrial led high bay lighting</td><td class="num">1,600</td><td class="num">19</td><td>/industrial-lighting</td><td><span class="tag-red">P1</span></td></tr>
+          <tr><td class="label-cell">led parking lot light fixtures</td><td class="num">1,000</td><td class="num">19</td><td>/led-outdoor-lighting</td><td><span class="tag-red">P1</span></td></tr>
+          <tr><td class="label-cell">commercial led lights</td><td class="num">880</td><td class="num">32</td><td>/commercial-lighting</td><td><span class="tag-red">P1</span></td></tr>
+          <tr><td class="label-cell">led light manufacturers</td><td class="num">390</td><td class="num">61</td><td>首页 / OEM</td><td>P1 高KD, 内容侧攻</td></tr>
+          <tr><td class="label-cell">commercial led flood lights</td><td class="num">480</td><td class="num">31</td><td>/led-outdoor-lighting</td><td><span class="tag-red">P1</span></td></tr>
+          <tr><td class="label-cell">high bay led light fixtures</td><td class="num">390</td><td class="num">18</td><td>/industrial-lighting</td><td><span class="tag-red">P1</span></td></tr>
+          <tr><td class="label-cell">led flood lights manufacturers</td><td class="num">390</td><td class="num">—</td><td>/led-outdoor-lighting</td><td><span class="tag-red">P1</span> 无KD机会</td></tr>
+          <tr><td class="label-cell">industrial led lighting manufacturers china</td><td class="num">70</td><td class="num">13</td><td>/industrial-lighting</td><td><span class="tag-red">P1</span> 低KD红利</td></tr>
+          <tr><td class="label-cell">led canopy light fixtures</td><td class="num">260</td><td class="num">11</td><td>/commercial-lighting</td><td><span class="tag-red">P1</span> 低KD红利</td></tr>
+          <tr><td class="label-cell">led warehouse lighting high bay</td><td class="num">260</td><td class="num">20</td><td>/industrial-lighting</td><td><span class="tag-red">P1</span></td></tr>
+          <tr><td class="label-cell">led light distributor</td><td class="num">480</td><td class="num">—</td><td>首页</td><td><span class="tag-red">P1</span> 无KD红利</td></tr>
+          <tr><td class="label-cell">commercial exterior led lighting fixtures</td><td class="num">320</td><td class="num">20</td><td>/commercial-lighting</td><td><span class="tag-red">P1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="foot">
+    <div>数据来源：SEMrush US · 2026.07 | KD = Keyword Difficulty</div>
+    <div>Act II · Keywords</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 8 · SEM 广告策略 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>第二幕 · SEM 策略</div>
+    <div>10 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:4vh">
+    <div class="kicker" data-anim>SEM · Google Ads</div>
+    <h2 class="h-xl" data-anim>Google Ads 测试方案</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:1.5vh" data-anim>精准匹配 B2B 采购词，排除泛流量，控制获客成本。</p>
+    <div class="scroll-content" data-anim>
+      <table class="kpi-table" style="width:100%; margin-bottom:2vh">
+        <thead>
+          <tr><th>广告系列</th><th>关键词方向</th><th>落地页</th><th>匹配方式</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="label-cell">Manufacturer</td><td>led light manufacturer; led lighting factory</td><td>首页 / OEM</td><td>Phrase + Exact</td></tr>
+          <tr><td class="label-cell">Supplier</td><td>led light supplier; led lights wholesale</td><td>/led-lights</td><td>Phrase + Exact</td></tr>
+          <tr><td class="label-cell">High Bay</td><td>led high bay lights; ufo led high bay</td><td>High Bay 页</td><td>Phrase + Exact</td></tr>
+          <tr><td class="label-cell">Outdoor</td><td>led flood lights; led street lights</td><td>Outdoor 页</td><td>Phrase + Exact</td></tr>
+          <tr><td class="label-cell">Commercial</td><td>commercial led lighting; led canopy</td><td>Commercial 页</td><td>Phrase + Exact</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="font-size:max(14px,1vw)">
+        <strong style="font-family:var(--serif-zh)">否词方向</strong><br>
+        <span style="opacity:.8; font-family:var(--sans-zh); line-height:1.7">
+          amazon, walmart, home depot, lowes, near me, installer,<br>
+          repair, diy, bedroom, gaming, christmas, party, fairy, string,<br>
+          car, truck, aquarium, grow light, red light therapy, nail, mask
+        </span>
+        <div class="cite" style="margin-top:1.2vh">排除 B2C 和零售意图，聚焦 B2B 项目采购</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>建议初始日预算 $50–$100，跑 2 周后按转化调整</div>
+    <div>Act II · SEM</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 11 · 内容优先级矩阵 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>内容 · Content Priority</div>
+    <div>11 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh">
+    <div class="kicker" data-anim>Content Priority Map</div>
+    <h2 class="h-xl" data-anim>内容选题优先级矩阵</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:1.5vh" data-anim>A 级高流量中低难度 · B 级产品支撑 · C 级长尾持续覆盖</p>
+    <div class="grid-3" style="flex:1; gap:2vw; margin-top:0.5vh" data-anim>
+      <div style="display:flex; flex-direction:column; gap:0.8vh; padding:1.5vh 1.2vw; background:rgba(45,138,78,.08); border-radius:6px; border-left:4px solid #2d8a4e">
+        <div style="font-family:var(--serif-en); font-weight:800; font-size:2.2vw; color:#2d8a4e">A</div>
+        <div class="meta" style="font-size:10px; letter-spacing:.12em; text-transform:none">高优先级 · 月搜索量 500+ · KD &lt; 40</div>
+        <div style="font-family:var(--sans-zh); font-size:max(13px,.9vw); line-height:1.6; opacity:.8">
+          Commercial LED Lighting Buying Guide<br>
+          LED High Bay Lights: Warehouse Guide<br>
+          LED Parking Lot Lights Project Guide<br>
+          How to Choose LED Flood Lights<br>
+          LED Light Manufacturer Selection Guide
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0.8vh; padding:1.5vh 1.2vw; background:rgba(45,138,78,.05); border-radius:6px; border-left:4px solid rgba(45,138,78,.6)">
+        <div style="font-family:var(--serif-en); font-weight:800; font-size:2.2vw; opacity:.7">B</div>
+        <div class="meta" style="font-size:10px; letter-spacing:.12em; text-transform:none">中优先级 · 月搜索量 200–500 · KD 40–60</div>
+        <div style="font-family:var(--sans-zh); font-size:max(13px,.9vw); line-height:1.6; opacity:.8">
+          LED Canopy Lights for Gas Stations<br>
+          Commercial LED Flood Lights Comparison<br>
+          OEM LED Lighting: What to Prepare<br>
+          Industrial LED Lighting for Factories<br>
+          LED Street Lights for Municipal Projects
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0.8vh; padding:1.5vh 1.2vw; background:rgba(127,127,127,.06); border-radius:6px; border-left:4px solid rgba(127,127,127,.4)">
+        <div style="font-family:var(--serif-en); font-weight:800; font-size:2.2vw; opacity:.4">C</div>
+        <div class="meta" style="font-size:10px; letter-spacing:.12em; text-transform:none">长尾覆盖 · 月搜索量 &lt; 200 · 低难度</div>
+        <div style="font-family:var(--sans-zh); font-size:max(13px,.9vw); line-height:1.6; opacity:.8">
+          LED Lighting Terms Glossary<br>
+          LED High Bay vs Low Bay Comparison<br>
+          How to Compare LED Suppliers<br>
+          LED Lighting Certifications Guide<br>
+          LED Installation & Maintenance Tips
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:1.5vh; font-size:max(13px,.95vw)" data-anim>
+      <span style="opacity:.8">全年目标：48–60 篇 B2B 内容 · A 级 20 篇 · B 级 18 篇 · C 级 10–15 篇</span>
+    </div>
+  </div>
+  <div class="foot">
+    <div>基于 Keyword Planner + SEMrush 交叉分析</div>
+    <div>Act III · Priority</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 10 · 内容战略日历 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>第三幕 · 内容战略</div>
+    <div>12 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh">
+    <div class="kicker" data-anim>Content Strategy</div>
+    <h2 class="h-xl" data-anim>内容选题日历</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:1vh" data-anim>24 篇选题规划 · Buying / Manufacturer / Application / Comparison 四轮驱动</p>
+    <div class="scroll-content" data-anim>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P1</div>
+        <div class="k" style="font-size:1.1vw">Manufacturer Guide</div>
+        <div class="v">How to Choose a Reliable LED Light Manufacturer in China</div>
+        <div class="m" style="opacity:.5; font-size:10px">led light manufacturer</div>
+        <div class="m" style="opacity:.7">WK 1–2</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P1</div>
+        <div class="k" style="font-size:1.1vw">Buying Guide</div>
+        <div class="v">Commercial LED Lighting Buying Guide for Project Buyers</div>
+        <div class="m" style="opacity:.5; font-size:10px">commercial led lighting</div>
+        <div class="m" style="opacity:.7">WK 3–4</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P1</div>
+        <div class="k" style="font-size:1.1vw">Application Guide</div>
+        <div class="v">Industrial LED Lighting for Warehouses and Factories</div>
+        <div class="m" style="opacity:.5; font-size:10px">industrial led lighting</div>
+        <div class="m" style="opacity:.7">WK 5–6</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P1</div>
+        <div class="k" style="font-size:1.1vw">Buying Guide</div>
+        <div class="v">LED High Bay Lights Buying Guide: Wattage, Lumens & Mounting</div>
+        <div class="m" style="opacity:.5; font-size:10px">led high bay lights</div>
+        <div class="m" style="opacity:.7">WK 7–8</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P1</div>
+        <div class="k" style="font-size:1.1vw">Application Guide</div>
+        <div class="v">How to Choose LED Flood Lights for Outdoor Projects</div>
+        <div class="m" style="opacity:.5; font-size:10px">led flood lights</div>
+        <div class="m" style="opacity:.7">Month 3</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P1</div>
+        <div class="k" style="font-size:1.1vw">Application Guide</div>
+        <div class="v">LED Parking Lot Lights: A Project Buyer's Guide</div>
+        <div class="m" style="opacity:.5; font-size:10px">led parking lot lights</div>
+        <div class="m" style="opacity:.7">Month 3</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P1</div>
+        <div class="k" style="font-size:1.1vw">Manufacturer Guide</div>
+        <div class="v">LED Street Light Manufacturer: Key Specs for Municipal Projects</div>
+        <div class="m" style="opacity:.5; font-size:10px">led street lights mfr</div>
+        <div class="m" style="opacity:.7">Month 3–4</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P2</div>
+        <div class="k" style="font-size:1.1vw">Comparison Guide</div>
+        <div class="v">LED High Bay vs Low Bay: Which Is Right for Your Project?</div>
+        <div class="m" style="opacity:.5; font-size:10px">high bay vs low bay</div>
+        <div class="m" style="opacity:.7">Month 4</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P2</div>
+        <div class="k" style="font-size:1.1vw">OEM/ODM Guide</div>
+        <div class="v">OEM LED Lighting: What Importers Should Prepare Before Sampling</div>
+        <div class="m" style="opacity:.5; font-size:10px">oem led lighting</div>
+        <div class="m" style="opacity:.7">Month 4–5</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P2</div>
+        <div class="k" style="font-size:1.1vw">Technical Guide</div>
+        <div class="v">LED Lighting Terms: Lumens, Watts, CCT, CRI, IP & Beam Angle</div>
+        <div class="m" style="opacity:.5; font-size:10px">led lighting terms</div>
+        <div class="m" style="opacity:.7">Month 5</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P2</div>
+        <div class="k" style="font-size:1.1vw">Application Guide</div>
+        <div class="v">Gas Station LED Canopy Lights: Selection for Contractors</div>
+        <div class="m" style="opacity:.5; font-size:10px">gas station canopy</div>
+        <div class="m" style="opacity:.7">Month 5–6</div>
+      </div>
+      <div class="rowline" style="grid-template-columns:.5fr 1.2fr 2.2fr 1.4fr .7fr">
+        <div class="m" style="font-size:11px">P3</div>
+        <div class="k" style="font-size:1.1vw">Supplier Guide</div>
+        <div class="v">How to Compare LED Suppliers: MOQ, Lead Time, Warranty</div>
+        <div class="m" style="opacity:.5; font-size:10px">led lighting supplier</div>
+        <div class="m" style="opacity:.7">Month 6</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>24 篇选题全览：7 篇 P1 · 8 篇 P2 · 9 篇 P3 · 全年目标 48–60 篇</div>
+    <div>Act III · Content</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 11 · SEO KPI 目标 -->
+<section class="slide dark">
+  <div class="chrome">
+    <div>第三幕 · KPI 目标</div>
+    <div>13 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:4vh">
+    <div class="kicker" data-anim>KPI Targets · 未来 12 个月</div>
+    <h2 class="h-xl" data-anim>SEO 核心指标</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:2vh" data-anim>四维增长模型：关键词 → 排名 → 外链 → 内容</p>
+    <div class="scroll-content" data-anim>
+      <table class="kpi-table" style="width:100%">
+        <thead>
+          <tr><th style="width:22%">指标</th><th style="width:16%">当前</th><th style="width:16%">3 个月</th><th style="width:16%">6 个月</th><th style="width:16%">12 个月</th><th style="width:14%">优先级</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">自然关键词数</td>
+            <td class="num" style="opacity:.5">0</td>
+            <td class="num" style="color:#3d9e55">50</td>
+            <td class="num" style="color:#3d9e55">150</td>
+            <td class="num" style="color:#3d9e55">300+</td>
+            <td class="num"><span class="tag-red">核心</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell">前 2 页关键词</td>
+            <td class="num" style="opacity:.5">0</td>
+            <td class="num" style="color:#3d9e55">5</td>
+            <td class="num" style="color:#3d9e55">15</td>
+            <td class="num" style="color:#3d9e55">30+</td>
+            <td class="num"><span class="tag-red">核心</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell">核心产品页优化</td>
+            <td class="num" style="opacity:.5">少量基础页</td>
+            <td class="num" style="color:#3d9e55">5</td>
+            <td class="num" style="color:#3d9e55">8–10</td>
+            <td class="num" style="color:#3d9e55">10–15</td>
+            <td class="num"><span class="tag-red">核心</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell">B2B 内容发布</td>
+            <td class="num" style="opacity:.5">少量内容</td>
+            <td class="num" style="color:#3d9e55">12 篇</td>
+            <td class="num" style="color:#3d9e55">24 篇</td>
+            <td class="num" style="color:#3d9e55">48–60 篇</td>
+            <td class="num"><span class="tag-red">核心</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell">应用场景页</td>
+            <td class="num" style="opacity:.5">基础不足</td>
+            <td class="num" style="color:#3d9e55">2</td>
+            <td class="num" style="color:#3d9e55">4–5</td>
+            <td class="num" style="color:#3d9e55">6–8</td>
+            <td class="num">重要</td>
+          </tr>
+          <tr>
+            <td class="label-cell">引荐域名</td>
+            <td class="num" style="opacity:.5">1</td>
+            <td class="num" style="color:#3d9e55">20</td>
+            <td class="num" style="color:#3d9e55">40–60</td>
+            <td class="num" style="color:#3d9e55">80–120</td>
+            <td class="num"><span class="tag-red">核心</span></td>
+          </tr>
+          <tr>
+            <td class="label-cell">行业相关外链</td>
+            <td class="num" style="opacity:.5">很少</td>
+            <td class="num" style="color:#3d9e55">25</td>
+            <td class="num" style="color:#3d9e55">50–80</td>
+            <td class="num" style="color:#3d9e55">100–150</td>
+            <td class="num">重要</td>
+          </tr>
+          <tr>
+            <td class="label-cell">月均 Organic Traffic</td>
+            <td class="num" style="opacity:.5">~0</td>
+            <td class="num" style="color:#3d9e55">200</td>
+            <td class="num" style="color:#3d9e55">500</td>
+            <td class="num" style="color:#3d9e55">2,000+</td>
+            <td class="num">参考</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout" style="margin-top:1.5vh; font-size:max(14px,1vw)" data-anim>
+        <strong style="font-family:var(--serif-zh)">关键假设</strong>
+        <div class="cite" style="margin-top:.8vh; text-transform:none; font-family:var(--sans-zh); letter-spacing:0; opacity:.8">
+          前提：第 1–2 周完成技术基础搭建（sitemap、页面结构优化）；<br>
+          每月持续发布 4–5 篇 B2B 内容；每季度获取 20–30 个外链域名。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>基于 SEMrush + Google Search Console 基准数据</div>
+    <div>Act III · KPI</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 12 · 竞品 SEMrush 截图 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>第三幕 · 竞品实证</div>
+    <div>14 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh">
+    <div class="kicker" data-anim>SEMrush Screenshots</div>
+    <h2 class="h-xl" data-anim>竞品 SEMrush 数据</h2>
+    <p class="lead" style="max-width:55vw; margin-bottom:1.5vh" data-anim>核心竞品的流量、关键词、域名评级全景对比。</p>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.2vh 1.2vw; flex:1; align-content:start">
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/vorlane.png" alt="Vorlane SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">Vorlane</span><span class="nb">DR 52</span></figcaption>
+      </figure>
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/zgsm-china.png" alt="ZGSM SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">ZGSM</span><span class="nb">DR 48</span></figcaption>
+      </figure>
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/grnled.png" alt="GRNLED SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">GRNLED</span><span class="nb">DR 35</span></figcaption>
+      </figure>
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/xhlux.png" alt="XHLUX SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">XHLUX</span><span class="nb">DR 22</span></figcaption>
+      </figure>
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/lithonia.png" alt="Lithonia SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">Lithonia</span><span class="nb">DR 82</span></figcaption>
+      </figure>
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/lsicorp.png" alt="LSI Corp SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">LSI Corp</span><span class="nb">DR 68</span></figcaption>
+      </figure>
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/dialight.png" alt="Dialight SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">Dialight</span><span class="nb">DR 56</span></figcaption>
+      </figure>
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/usled.png" alt="US LED SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">US LED</span><span class="nb">DR 44</span></figcaption>
+      </figure>
+      <figure class="tile" data-anim>
+        <div class="frame-img h-22">
+          <img src="images/syhledray.com.png" alt="SYH LED SEMrush">
+        </div>
+        <figcaption class="frame-cap"><span class="pf">SYH LEDRAY</span><span class="nb">当前</span></figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="foot">
+    <div>截图来源：SEMrush · 2026.07</div>
+    <div>Act III · Screenshots</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 13 · SYH 网站数据面板（交互） -->
+<section class="slide hero light">
+  <div class="chrome">
+    <div>SYH 数据面板</div>
+    <div>15 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>Live Data · 交互式数据</div>
+    <h2 class="h-xl" style="font-size:5.5vw" data-anim>SYH LED 网站数据</h2>
+    <p class="lead" style="max-width:60vw" data-anim>点击按钮查看详细原始数据</p>
+
+    <div class="btn-group" data-anim>
+      <button class="data-btn" onclick="toggleData(this,'kw-data')">📊 关键词数据</button>
+      <button class="data-btn" onclick="toggleData(this,'page-data')">📄 页面结构</button>
+      <button class="data-btn" onclick="toggleData(this,'backlink-data')">🔗 外链数据</button>
+      <button class="data-btn" onclick="toggleData(this,'content-data')">📝 内容缺口</button>
+    </div>
+
+    <div id="kw-data" class="data-panel">加载中...</div>
+    <div id="page-data" class="data-panel">加载中...</div>
+    <div id="backlink-data" class="data-panel">加载中...</div>
+    <div id="content-data" class="data-panel">加载中...</div>
+  </div>
+  <div class="foot">
+    <div>点击按钮展开原始数据 · 数据来源 SEMrush / GSC</div>
+    <div>Act III · SYH Data</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 14 · SEO/SEM 执行指南 -->
+<section class="slide dark">
+  <div class="chrome">
+    <div>执行指南 · Playbook</div>
+    <div>16 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:3vh">
+    <div class="kicker" data-anim>Execution Guide</div>
+    <h2 class="h-xl" data-anim>SEO & SEM 执行指南</h2>
+    <p class="lead" style="max-width:60vw; margin-bottom:0.5vh" data-anim>基于关键词差距 + 页面结构 + 内容选题三表对齐，四阶段执行。</p>
+    <div style="display:flex; justify-content:center; align-items:center; gap:1vw; margin-bottom:1vh" data-anim>
+      <span style="display:inline-flex; align-items:center; gap:0.6vw; font-family:var(--mono); font-size:11px; letter-spacing:.2em; opacity:.45; padding:4px 16px; border:1px solid rgba(255,255,255,.2); border-radius:999px">
+        <span style="opacity:.7">⌵</span> 按 → 键逐阶段查看 <span style="opacity:.7">⌵</span>
+      </span>
+      <span class="pipeline-progress" style="display:inline-flex; align-items:center; gap:0.4vw; font-family:var(--mono); font-size:12px; letter-spacing:.1em; opacity:.4; padding:4px 12px; border:1px solid rgba(255,255,255,.15); border-radius:999px">0 / 4</span>
+    </div>
+    <div class="scroll-content" data-anim>
+      <div class="pipeline-section" style="margin-top:0; border-top:0; padding-top:0">
+        <div class="pipeline-label">阶段一 · 技术基础 (第 1–2 周)</div>
+        <ul style="font-family:var(--sans-zh); font-size:max(14px,1.05vw); opacity:.8; line-height:1.8; padding-left:1.2em">
+          <li>检查并清理所有测试页（lorem ipsum 等），301/noindex 处理</li>
+          <li>统一 canonical 标签，确保每个主词只有 1 个目标页面</li>
+          <li>提交优化后的 XML sitemap 到 Google Search Console</li>
+          <li>修复产品页标题重复和摘要不匹配问题（panel、tube 等）</li>
+          <li>检查内链结构，建立 Manufacturer / Outdoor / Commercial 三个集群</li>
+        </ul>
+      </div>
+      <div class="pipeline-section">
+        <div class="pipeline-label">阶段二 · 核心页面重写 (第 2–4 周)</div>
+        <ul style="font-family:var(--sans-zh); font-size:max(14px,1.05vw); opacity:.8; line-height:1.8; padding-left:1.2em">
+          <li>首页重写：17+ years、ISO、月产能、sample time 放到首屏下方，强化 manufacturer 定位</li>
+          <li>Commercial / Industrial / Outdoor 三大分类页每页 800–1,200 词 + 应用场景 + 产品表 + FAQ</li>
+          <li>产品子分类页统一模板：产品定义 + 参数 + 应用 + 定制 + FAQ + 询盘 CTA</li>
+          <li>所有产品页增加 PDF spec / IES file / installation guide 下载 CTA</li>
+          <li>每个分类页加 5–8 个 FAQ（MOQ、lead time、warranty、certification）</li>
+          <li>产品详情页只做型号词，分类页做主词 — 清理重复和 canonical</li>
+        </ul>
+      </div>
+      <div class="pipeline-section">
+        <div class="pipeline-label">阶段三 · 内容 + 场景页 (第 2–6 个月)</div>
+        <ul style="font-family:var(--sans-zh); font-size:max(14px,1.05vw); opacity:.8; line-height:1.8; padding-left:1.2em">
+          <li>每月 4–6 篇 B2B 内容，按 24 题选题日历执行（Buying / Manufacturer / Application / Comparison）</li>
+          <li>新增 /applications/ 场景页：Parking Lot、Warehouse、Gas Station、Office、Retail</li>
+          <li>新增独立 OEM/ODM 转化页：写流程、MOQ、图纸、打样、包装、质检</li>
+          <li>每篇内容内链到 2–3 个产品分类页，形成集群权重</li>
+          <li>Quality Assurance 页面补 19-step testing、ISO、inspection report — 作为内链枢纽</li>
+          <li>所有产品页加入 Get Quote / Request Sample / WhatsApp / Email CTA</li>
+        </ul>
+      </div>
+      <div class="pipeline-section">
+        <div class="pipeline-label">阶段四 · SEM + 外链 (持续)</div>
+        <ul style="font-family:var(--sans-zh); font-size:max(14px,1.05vw); opacity:.8; line-height:1.8; padding-left:1.2em">
+          <li>Google Ads 5 组精准匹配（Manufacturer / Supplier / High Bay / Outdoor / Commercial）</li>
+          <li>否词排除 B2C 意图：amazon、walmart、near me、diy、christmas、grow light 等</li>
+          <li>B2B 外链来源：行业目录、采购指南、供应商列表、guest post</li>
+          <li>每季度新增 20–30 外链域名，优先英文行业站点</li>
+          <li>每月复盘 GSC 数据，按曝光词修正 Title 和 FAQ</li>
+          <li>季度更新外链策略，目标 12 个月后 80–120 域名</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>B2B SEO Playbook · 2026–2027</div>
+    <div>Act III · Playbook</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 15 · 未来 12 个月路线图 -->
+<section class="slide light">
+  <div class="chrome">
+    <div>路线图 · Roadmap</div>
+    <div>17 / 18</div>
+  </div>
+  <div class="frame" style="padding-top:4vh">
+    <div class="kicker" data-anim>Roadmap · 2026.07 → 2027.06</div>
+    <h2 class="h-xl" data-anim>十二个月增长路线图</h2>
+    <div class="roadmap-grid" data-anim>
+      <div class="roadmap-phase" style="border-color:#2d8a4e">
+        <div class="phase-time">Month 1–3</div>
+        <div class="phase-title">Foundation</div>
+        <ul class="phase-items">
+          <li>技术清理 + 站点审计</li>
+          <li>5 个核心页面重写</li>
+          <li>8–12 篇 P1 内容发布</li>
+          <li>Google Ads 测试启动</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase" style="border-color:#2d8a4e">
+        <div class="phase-time">Month 4–6</div>
+        <div class="phase-title">Growth</div>
+        <ul class="phase-items">
+          <li>产品分类页深度优化</li>
+          <li>场景应用页 (4–6 个)</li>
+          <li>外链建设启动</li>
+          <li>GSC 数据驱动迭代</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase" style="border-color:#2d8a4e">
+        <div class="phase-time">Month 7–9</div>
+        <div class="phase-title">Scale</div>
+        <ul class="phase-items">
+          <li>OEM/ODM 转化页上线</li>
+          <li>每月 6 篇内容持续输出</li>
+          <li>外链加速 (季度 +50)</li>
+          <li>SEM 扩量投放</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase" style="border-color:#2d8a4e">
+        <div class="phase-time">Month 10–12</div>
+        <div class="phase-title">Dominate</div>
+        <ul class="phase-items">
+          <li>全产品线内容矩阵</li>
+          <li>Top 2 页 30+ 关键词</li>
+          <li>月流量 2,000+</li>
+          <li>品牌搜索量提升</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout" style="font-size:max(14px,1vw); max-width:80vw" data-anim>
+      <strong style="font-family:var(--serif-zh)">核心目标</strong> 12 个月后：300+ 关键词 · 30+ Top 2 页 · 80–120 外链域名 · 48–60 篇内容 · 产品页 10–15 · 场景页 6–8
+    </div>
+  </div>
+  <div class="foot">
+    <div>里程碑驱动 · 每季度复盘调整</div>
+    <div>Roadmap · 2026–2027</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PAGE 16 · 结尾 -->
+<section class="slide hero dark">
+  <div class="chrome">
+    <div>总结 · Summary</div>
+    <div>18 / 18</div>
+  </div>
+  <div class="frame" style="display:grid; gap:5vh; align-content:center; min-height:80vh">
+    <div class="kicker" data-anim>Takeaway</div>
+    <h1 class="h-hero" style="font-size:8vw; line-height:1.1">
+      <span data-anim style="display:block">从 0 到 300+ 关键词</span>
+      <span data-anim style="display:block">到 <span class="accent-red">100+ 外链域名</span></span>
+    </h1>
+    <p class="lead" style="max-width:50vw" data-anim>
+      B2B 照明 SEO 不是一蹴而就，但每一步都有清晰路径。<br>
+      技术清理 → 内容深耕 → 外链建设 → SEM 精准投放。
+    </p>
+    <div class="meta-row" data-anim>
+      <span>SYH LEDRAY · syhledray.com</span><span>·</span><span>2026.07</span>
+    </div>
+    <div style="display:flex; gap:2vw; margin-top:1vh" data-anim>
+      <span class="tag" style="border-color:currentColor">SEO Foundation</span>
+      <span class="tag" style="border-color:currentColor">Content Strategy</span>
+      <span class="tag" style="border-color:currentColor">SEM Testing</span>
+    </div>
+  </div>
+  <div class="foot">
+    <div>SYH LED · SEO & SEM 增长蓝图</div>
+    <div>— END —</div>
+  </div>
+</section>
+
+</div>
+
+<div id="nav"></div>
+
+<script>
+/* =============== 交互式数据面板 =============== */
+const DATA = {
+  'kw-data': `<table class="data-table">
+    <tr><th>指标</th><th>数值</th><th>说明</th></tr>
+    <tr><td>已收录关键词</td><td>0</td><td>SEMrush 未检测到自然排名</td></tr>
+    <tr><td>排名 Top 1–3</td><td>0</td><td>首页顶部位置</td></tr>
+    <tr><td>排名 Top 4–10</td><td>0</td><td>首页其余位置</td></tr>
+    <tr><td>排名 Top 11–20</td><td>0</td><td>第二页</td></tr>
+    <tr><td>排名 21+</td><td>0</td><td>长尾深页</td></tr>
+    <tr><td>B2B 关键词总数</td><td>47</td><td>Google Ads Keyword Planner</td></tr>
+    <tr><td>月搜索总量</td><td>18,700</td><td>B2B 词库合计</td></tr>
+    <tr><td>最低建议出价</td><td>¥0.16</td><td>Top of page bid (low range)</td></tr>
+    <tr><td>最高建议出价</td><td>¥294.25</td><td>Top of page bid (high range)</td></tr>
+    <tr><td>平均低出价</td><td>¥5.07</td><td>27 个有竞价数据的关键词</td></tr>
+    <tr><td>平均高出价</td><td>¥38.97</td><td>Top of page bid (high range avg)</td></tr>
+    <tr><td>B2B 意图机会词</td><td>1,759</td><td>筛选后的高价值词</td></tr>
+    <tr><td>P1 核心关键词</td><td>1,458</td><td>最高优先级</td></tr>
+  </table>`,
+
+  'page-data': `<table class="data-table">
+    <tr><th>页面问题</th><th>严重程度</th><th>影响</th></tr>
+    <tr><td>站点内容稀缺</td><td>🔴 CRITICAL</td><td>Google 无法理解业务主题</td></tr>
+    <tr><td>缺少产品分类页深度</td><td>🔴 CRITICAL</td><td>无法竞争产品词排名</td></tr>
+    <tr><td>缺少应用场景落地页</td><td>🟡 HIGH</td><td>错失高转化场景流量</td></tr>
+    <tr><td>XML sitemap 待优化</td><td>🟡 HIGH</td><td>收录效率低</td></tr>
+    <tr><td>Canonical 标签需规范</td><td>🟡 MEDIUM</td><td>避免权重分散</td></tr>
+    <tr><td>页面 Title 需重写</td><td>🟡 MEDIUM</td><td>需要含 B2B 关键词</td></tr>
+    <tr><td>FAQ 模块缺失</td><td>🟢 LOW</td><td>错失 feature snippet 机会</td></tr>
+  </table>`,
+
+  'backlink-data': `<table class="data-table">
+    <tr><th>外链指标</th><th>数值</th><th>对比竞品</th></tr>
+    <tr><td>Referring Domains</td><td>1</td><td>Vorlane: ~320 | ZGSM: ~280</td></tr>
+    <tr><td>Total Backlinks</td><td>很少</td><td>Vorlane: ~2,100 | ZGSM: ~1,600</td></tr>
+    <tr><td>Dofollow %</td><td>待检测</td><td>行业平均 ~55–65%</td></tr>
+    <tr><td>外链质量</td><td>待提升</td><td>需拓展英文行业目录/B2B 平台</td></tr>
+    <tr><td>目标：12 个月后</td><td>80–120 domains</td><td>季度新增 20–30 个</td></tr>
+  </table>`,
+
+  'content-data': `<table class="data-table">
+    <tr><th>内容类型</th><th>当前</th><th>目标 (12 月)</th><th>优先级</th></tr>
+    <tr><td>Buying Guide</td><td>0</td><td>10–12</td><td>🔴 P1</td></tr>
+    <tr><td>Manufacturer Guide</td><td>0</td><td>8–10</td><td>🔴 P1</td></tr>
+    <tr><td>Application Guide</td><td>0</td><td>12–15</td><td>🔴 P1</td></tr>
+    <tr><td>Comparison Guide</td><td>0</td><td>5–6</td><td>🟡 P2</td></tr>
+    <tr><td>Technical Guide</td><td>0</td><td>5–6</td><td>🟡 P2</td></tr>
+    <tr><td>Case Study / Project</td><td>0</td><td>4–5</td><td>🟡 P2</td></tr>
+    <tr><td>FAQ / Glossary</td><td>0</td><td>4–6</td><td>🟢 P3</td></tr>
+    <tr><td><strong>合计</strong></td><td><strong>少量</strong></td><td><strong>48–60</strong></td><td></td></tr>
+  </table>`
+};
+
+function toggleData(btn, id) {
+  const panels = document.querySelectorAll('.data-panel');
+  panels.forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.data-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(id);
+  if(panel.innerHTML === '加载中...' || panel.innerHTML === '') {
+    panel.innerHTML = DATA[id] || '<em>暂无数据</em>';
+  }
+  panel.classList.add('show');
+  btn.classList.add('active');
+}
+</script>
+
+<script>
+/* =============== WebGL 双背景 =============== */
+const VS = `attribute vec2 position;void main(){gl_Position=vec4(position,0.0,1.0);}`;
+
+const FS_DARK = `precision highp float;
+uniform vec2 u_resolution;uniform float u_time;uniform vec2 u_mouse;
+vec3 palette(float t,vec3 a,vec3 b,vec3 c,vec3 d){return a+b*cos(6.28318*(c*t+d));}
+void main(){
+  vec2 uv=gl_FragCoord.xy/u_resolution.xy;
+  vec2 p=uv*2.0-1.0;p.x*=u_resolution.x/u_resolution.y;
+  vec2 m=u_mouse*2.0-1.0;m.x*=u_resolution.x/u_resolution.y;
+  float md=length(p-m);
+  float mr=sin(md*15.0-u_time*4.0)*exp(-md*3.0);p+=mr*0.08;
+  vec2 p0=p;
+  for(float i=1.0;i<4.0;i++){
+    p.x+=0.1/i*sin(i*3.0*p.y+u_time*0.4)+0.05;
+    p.y+=0.1/i*cos(i*2.0*p.x+u_time*0.3)-0.05;
+  }
+  float r=length(p);float ang=atan(p.y,p.x);
+  vec3 a=vec3(0.10,0.14,0.10);
+  vec3 b=vec3(0.03,0.07,0.04);
+  vec3 c=vec3(0.85,1.0,0.88);
+  vec3 d=vec3(0.12,0.22,0.14);
+  vec3 col=palette(r*1.5+p0.x*0.5+u_time*0.1,a,b,c,d);
+  float disp=sin(r*25.0-u_time*1.5+ang*2.0)*0.5+0.5;
+  col+=vec3(disp*0.005,disp*0.02,disp*0.008);
+  float hi=pow(sin(p.x*4.0+p.y*3.0+u_time)*0.5+0.5,8.0);
+  col+=hi*0.06;
+  vec3 base=vec3(0.04,0.06,0.04);
+  col=mix(base,col,0.82);
+  gl_FragColor=vec4(col,1.0);
+}`;
+
+const FS_LIGHT = `precision highp float;
+uniform vec2 u_resolution;uniform float u_time;uniform vec2 u_mouse;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){
+  vec2 i=floor(p),f=fract(p);
+  float a=hash(i),b=hash(i+vec2(1,0));
+  float c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
+  vec2 u=f*f*(3.0-2.0*f);
+  return mix(a,b,u.x)+(c-a)*u.y*(1.0-u.x)+(d-b)*u.x*u.y;
+}
+float fbm(vec2 p){
+  float v=0.0,a=0.5;
+  mat2 m=mat2(0.80,0.60,-0.60,0.80);
+  for(int i=0;i<5;i++){v+=a*noise(p);p=m*p*2.02;a*=0.5;}
+  return v;
+}
+void main(){
+  vec2 uv=gl_FragCoord.xy/u_resolution.xy;
+  vec2 p=uv;p.x*=u_resolution.x/u_resolution.y;
+  vec2 m=u_mouse;m.x*=u_resolution.x/u_resolution.y;
+  vec2 md=p-m;float dl=length(md);
+  p+=normalize(md+vec2(0.0001))*exp(-dl*5.0)*0.03;
+  vec2 q=vec2(fbm(p*1.8+u_time*0.07),fbm(p*1.8+vec2(5.2,1.3)+u_time*0.06));
+  vec2 r=vec2(fbm(p*2.0+q*1.3+vec2(1.7,9.2)+u_time*0.05),
+              fbm(p*2.0+q*1.3+vec2(8.3,2.8)+u_time*0.04));
+  float f=fbm(p*2.2+r*1.5);
+  vec3 silverDark=vec3(0.88,0.84,0.82);
+  vec3 paper=vec3(0.96,0.94,0.92);
+  vec3 col=mix(silverDark,paper,f);
+  float ph=r.x*2.2+u_time*0.35;
+  col+=vec3(0.55,0.78,0.58)*sin(ph)*0.05;
+  col+=vec3(0.50,0.70,0.55)*sin(ph*0.8+2.0)*0.04;
+  float hl=smoothstep(0.48,0.92,f);
+  col+=hl*0.05;
+  gl_FragColor=vec4(col,1.0);
+}`;
+
+const mouse={x:0.5,y:0.5};
+addEventListener('mousemove',e=>{mouse.x=e.clientX/innerWidth;mouse.y=e.clientY/innerHeight});
+
+function bootGL(canvasId, fsSrc){
+  const canvas=document.getElementById(canvasId);
+  const gl=canvas.getContext('webgl',{alpha:false,antialias:true});
+  if(!gl) return ()=>false;
+  const mk=(t,s)=>{const sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);return sh};
+  const prog=gl.createProgram();
+  gl.attachShader(prog,mk(gl.VERTEX_SHADER,VS));
+  gl.attachShader(prog,mk(gl.FRAGMENT_SHADER,fsSrc));
+  gl.linkProgram(prog);gl.useProgram(prog);
+  const buf=gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
+  const pos=gl.getAttribLocation(prog,'position');
+  gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
+  const lRes=gl.getUniformLocation(prog,'u_resolution');
+  const lT=gl.getUniformLocation(prog,'u_time');
+  const lM=gl.getUniformLocation(prog,'u_mouse');
+  const resize=()=>{
+    const d=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=innerWidth*d;canvas.height=innerHeight*d;
+    gl.viewport(0,0,canvas.width,canvas.height);
+  };
+  addEventListener('resize',resize);resize();
+  return (tSec)=>{
+    gl.uniform2f(lRes,canvas.width,canvas.height);
+    gl.uniform1f(lT,tSec);
+    gl.uniform2f(lM,mouse.x,1-mouse.y);
+    gl.drawArrays(gl.TRIANGLES,0,6);
+    return true;
+  };
+}
+const drawDark=bootGL('bg-dark',FS_DARK);
+const drawLight=bootGL('bg-light',FS_LIGHT);
+const t0=Date.now();
+(function loop(){
+  const t=(Date.now()-t0)/1000;
+  drawDark(t);drawLight(t);
+  requestAnimationFrame(loop);
+})();
+
+// =============== 导航 ===============
+const deck=document.getElementById('deck');
+const slides=deck.querySelectorAll('.slide');
+const nav=document.getElementById('nav');
+let idx=0,total=slides.length,lock=false;
+
+deck.style.width=(total*100)+'vw';
+
+slides.forEach((s,i)=>{
+  const b=document.createElement('button');
+  b.className='dot';b.dataset.i=i;b.setAttribute('aria-label','Page '+(i+1));
+  b.onclick=()=>go(i);
+  nav.appendChild(b);
+});
+
+function go(n){
+  if(lock)return;
+  idx=Math.max(0,Math.min(total-1,n));
+  deck.style.transform=`translateX(${-idx*100}vw)`;
+  nav.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  const el=slides[idx];
+  const th=el.dataset.theme || (el.classList.contains('light')?'light':(el.classList.contains('dark')?'dark':'dark'));
+  document.body.classList.toggle('light-bg',th==='light');
+  if(window.__playSlide) setTimeout(()=>window.__playSlide(idx), 450);
+  lock=true;setTimeout(()=>lock=false,700);
+}
+
+// =============== ESC 索引视图 ===============
+let overviewOn=false;
+const ov=document.createElement('div');
+ov.id='overview';
+ov.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(var(--ink-rgb),.92);backdrop-filter:blur(12px);display:none;overflow-y:auto;padding:4vh 4vw';
+document.body.appendChild(ov);
+
+function buildOverview(){
+  ov.innerHTML='';
+  const grid=document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:repeat(4,1fr);gap:2vh 1.6vw;max-width:90vw;margin:0 auto';
+  slides.forEach((s,i)=>{
+    const card=document.createElement('div');
+    card.style.cssText='cursor:pointer;border-radius:6px;overflow:hidden;border:2px solid '+(i===idx?'rgba(var(--paper-rgb),.8)':'rgba(var(--paper-rgb),.15)')+';transition:border-color .2s';
+    card.onmouseenter=()=>card.style.borderColor='rgba(var(--paper-rgb),.6)';
+    card.onmouseleave=()=>card.style.borderColor=i===idx?'rgba(var(--paper-rgb),.8)':'rgba(var(--paper-rgb),.15)';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='width:100%;aspect-ratio:16/9;overflow:hidden;position:relative;pointer-events:none;background:'+(s.classList.contains('light')?'var(--paper)':'var(--ink)');
+    const clone=s.cloneNode(true);
+    clone.style.cssText='width:100vw;height:100vh;transform:scale('+(1/4.5)+');transform-origin:top left;position:absolute;top:0;left:0;pointer-events:none';
+    wrap.appendChild(clone);
+    const label=document.createElement('div');
+    label.style.cssText='padding:6px 10px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--paper);opacity:.7';
+    label.textContent=(i+1)+' / '+total;
+    card.appendChild(wrap);
+    card.appendChild(label);
+    card.onclick=()=>{toggleOverview();go(i)};
+    grid.appendChild(card);
+  });
+  ov.appendChild(grid);
+}
+
+function toggleOverview(){
+  overviewOn=!overviewOn;
+  if(overviewOn){buildOverview();ov.style.display='block';}
+  else{ov.style.display='none';}
+}
+
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){e.preventDefault();toggleOverview();return;}
+  if(overviewOn)return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '||e.key==='ArrowDown'){
+    if(window.__pipeAdvance && window.__pipeAdvance()) return;
+    go(idx+1);
+    return;
+  }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'||e.key==='ArrowUp')go(idx-1);
+  if(e.key==='Home')go(0);
+  if(e.key==='End')go(total-1);
+});
+
+let wheelTO=null,wheelAcc=0;
+addEventListener('wheel',e=>{
+  wheelAcc+=e.deltaY+e.deltaX;
+  if(Math.abs(wheelAcc)>50){
+    if(wheelAcc>0 && window.__pipeAdvance && window.__pipeAdvance()){
+      wheelAcc=0;
+    }else{
+      go(idx+(wheelAcc>0?1:-1));wheelAcc=0;
+    }
+  }
+  clearTimeout(wheelTO);wheelTO=setTimeout(()=>wheelAcc=0,150);
+},{passive:true});
+
+let tx=0,ty=0;
+addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchend',e=>{
+  const dx=(e.changedTouches[0].clientX-tx);
+  const dy=(e.changedTouches[0].clientY-ty);
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){
+    if(dx<0 && window.__pipeAdvance && window.__pipeAdvance()) return;
+    go(idx+(dx<0?1:-1));
+  }
+},{passive:true});
+
+go(0);
+</script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+
+<script type="module">
+let motion;
+try {
+  motion = await import('./assets/motion.min.js');
+} catch(e1) {
+  try {
+    motion = await import('https://cdn.jsdelivr.net/npm/motion@11.11.17/+esm');
+  } catch(e2) {
+    console.warn('[motion] local + CDN both failed, disabling animations', e1, e2);
+    document.querySelectorAll('[data-anim]').forEach(el=>{el.style.opacity='1';el.style.transform='none'});
+    document.querySelectorAll('[data-animate="pipeline"] [data-anim]').forEach(el=>el.style.opacity='1');
+  }
+}
+
+if(motion){
+  const { animate, stagger } = motion;
+  document.body.classList.add('motion-ready');
+  const EASE = [.22, 1, .36, 1];
+  const slides = [...document.querySelectorAll('.slide')];
+  let pipeStep = -1;
+  let lastIdx = -1;
+
+  function resetAnims(slide){
+    slide.querySelectorAll('[data-anim]').forEach(el=>{
+      el.style.opacity='';
+      el.style.transform='';
+    });
+  }
+
+  function playSlide(i){
+    const slide = slides[i];
+    if(!slide) return;
+    lastIdx = i;
+    const recipe = slide.dataset.animate || (slide.classList.contains('hero') ? 'hero' : 'cascade');
+
+    if(recipe === 'pipeline'){
+      pipeStep = -1;
+      // 重置进度指示器
+      const steps = [...slide.querySelectorAll('[data-anim="step"]')];
+      const progress = slide.querySelector('.pipeline-progress');
+      if(progress) progress.textContent = '0 / ' + steps.length;
+      slide.querySelectorAll('[data-anim]').forEach(el=>{
+        el.style.opacity='0.15';
+        el.style.transform='none';
+      });
+      return;
+    }
+
+    resetAnims(slide);
+    const all = [...slide.querySelectorAll('[data-anim]')];
+    if(!all.length) return;
+
+    if(recipe === 'directional'){
+      const lefts  = all.filter(el=>el.dataset.anim==='left');
+      const divs   = all.filter(el=>el.dataset.anim==='divider');
+      const rights = all.filter(el=>el.dataset.anim==='right');
+      const others = all.filter(el=>!['left','right','divider'].includes(el.dataset.anim));
+      if(others.length) animate(others, {opacity:[0,1], y:[12,0]}, {duration:.6, delay:stagger(.1, {start:.15}), easing:EASE});
+      if(lefts.length)  animate(lefts,  {opacity:[0,1], x:[-24,0]}, {duration:.8, delay:.35, easing:EASE});
+      if(divs.length)   animate(divs,   {opacity:[0,.25]},          {duration:.5, delay:.9});
+      if(rights.length) animate(rights, {opacity:[0,1], x:[24,0]},  {duration:.8, delay:1.0, easing:EASE});
+      return;
+    }
+
+    if(recipe === 'quote'){
+      const lines = all.filter(el=>el.dataset.anim==='line');
+      const others = all.filter(el=>el.dataset.anim!=='line');
+      if(others.length) animate(others, {opacity:[0,1], y:[8,0]},    {duration:.6, delay:stagger(.12, {start:.2}), easing:EASE});
+      if(lines.length)  animate(lines,  {opacity:[.35,1], y:[10,0]}, {duration:.8, delay:stagger(.55, {start:.5}), easing:EASE});
+      return;
+    }
+
+    if(recipe === 'hero'){
+      animate(all, {opacity:[0,1], y:[14,0]}, {duration:.9, delay:stagger(.16, {start:.2}), easing:EASE});
+      return;
+    }
+
+    animate(all, {opacity:[0,1], y:[16,0]}, {duration:.75, delay:stagger(.1, {start:.15}), easing:EASE});
+  }
+
+  function pipeAdvance(){
+    const slide = slides[lastIdx];
+    if(!slide || slide.dataset.animate !== 'pipeline') return false;
+    const steps  = [...slide.querySelectorAll('[data-anim="step"]')];
+    const arrows = [...slide.querySelectorAll('[data-anim="arrow"]')];
+    if(pipeStep >= steps.length - 1) return false;
+    pipeStep++;
+    animate(steps[pipeStep], {opacity:[0.15,1], y:[8,0]}, {duration:.5, easing:EASE});
+    // 更新进度
+    const progress = slide.querySelector('.pipeline-progress');
+    if(progress) progress.textContent = (pipeStep+1) + ' / ' + steps.length;
+    if(pipeStep > 0 && arrows[pipeStep-1]){
+      animate(arrows[pipeStep-1], {opacity:[0.15,.7]}, {duration:.3, delay:.15});
+    }
+    return true;
+  }
+
+  window.__playSlide = playSlide;
+  window.__pipeAdvance = pipeAdvance;
+
+  playSlide(0);
+}
+</script>
+</body>
+</html>
